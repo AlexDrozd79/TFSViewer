@@ -80,9 +80,15 @@ public class QueryExecutor
     }
 
 
-    public IList<WorkItem> QueryFeatures(string project)
+    public IList<WorkItem> QueryFeatures(string project, DateTime? date =  null)
     {
         VssCredentials credentials = CreateCredentials();
+
+        DateTime currentDate = DateTime.Today;
+        if (date.HasValue)
+        {
+            currentDate = date.Value;
+        }
 
         var wiql = new Wiql()
         {
@@ -91,7 +97,7 @@ public class QueryExecutor
                     "From WorkItems " +
                     "Where [System.TeamProject] = '" + project + "' " +
                     "AND [System.WorkItemType] = 'Feature' AND  [System.State] <> 'Closed' AND  [System.State] <> 'Removed' and [NG.Release] = '2023-05' and [System.AreaPath] under 'NeoAppAgile\\Lotteries'" +
-                    "Order By [State] Asc  ASOF '" + DateTime.Today.ToString("MM-dd-yyyy") + "'",
+                    "Order By [ID] Asc  ASOF '" + currentDate.ToString("MM-dd-yyyy") + "'",
         };
 
 

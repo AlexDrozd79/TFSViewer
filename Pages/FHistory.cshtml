@@ -1,0 +1,33 @@
+﻿@page
+@model FHistoryModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+
+
+
+
+    <table id="WFE" class="data-table">
+
+        @foreach (var item in @Model.info.All)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Fields["System.Title"]</td>
+                <td>@{
+                        if (item.Fields.Keys.Contains("System.AssignedTo"))
+                        {
+                            @((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
+                        }
+
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+
+
+</div>
