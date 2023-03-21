@@ -5,35 +5,88 @@
 }
 
 <div class="text-center">
-    <div> <span>All features:</span> @Model.info.All.Count</div>
-    <div> <span>Waiting for evaluation:</span> @Model.info.WaitingForEvaluation.Count</div>
-    <div> <span>Waiting for groomimg:</span> @Model.info.WaitingForGrooming.Count</div>
-    <div> <span>Ready</span> @Model.info.Ready.Count</div>
+
 
     <div>
         <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
         <script>
-            var xValues = ["All", "Waiting for evaluation", "Waiting for groomimg", "Ready"];
-            var yValues = [@Model.info.All.Count, @Model.info.WaitingForEvaluation.Count, @Model.info.WaitingForGrooming.Count, @Model.info.Ready.Count];
-            var barColors = ["Yellow", "red", "blue", "green"];
+            var xValues = ["Waiting for evaluation", "Waiting for groomimg", "Ready"];
+            var yValues = [@Model.info.WaitingForEvaluation.Count, @Model.info.WaitingForGrooming.Count, @Model.info.Ready.Count];
+            var barColors = ["red", "blue", "green"];
+            var tags = ["WFE", "WFG", "OK"];
 
-            new Chart("myChart", {
-                type: "bar",
+            const chart = new Chart("myChart", {
+                type: "doughnut",
                 data: {
                     labels: xValues,
                     datasets: [{
                         backgroundColor: barColors,
-                        data: yValues
+                        data: yValues,
+                        tag: tags
                     }]
                 },
                 options: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: "World Wine Production 2018"
+                    legend: { display: true },
+                    onClick: (e) => {
+                        var activePoints = chart.getElementsAtEvent(e);
+                        if (activePoints.length > 0) {
+                            //get the internal index of slice in pie chart
+                            var clickedElementindex = activePoints[0]["_index"];
+
+                            //get specific label by index 
+                            var tag = chart.data.datasets[0].tag[clickedElementindex];
+
+                            $("table.data-table").addClass("hidden");
+                            $("#" + tag).removeClass("hidden");
+
+                        }
                     }
                 }
             });
         </script>
     </div>
+
+    <table id="WFE" class="data-table hidden">
+
+        @foreach (var item in @Model.info.WaitingForEvaluation)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Fields["System.Title"]</td>
+                <td>@((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
+                </td>
+            </tr>
+        }
+    </table>
+
+    <table id="WFG" class="data-table hidden">
+    @foreach (var item in @Model.info.WaitingForGrooming)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Fields["System.Title"]</td>
+            <td>@((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
+            </td>
+        </tr>
+    }
+    </table>
+
+    <table id="OK" class="data-table hidden">
+    @foreach (var item in @Model.info.Ready)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Fields["System.Title"]</td>
+            <td>@{
+                if (item.Fields.Keys.Contains("System.AssignedTo"))
+                {
+                    @((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
+                }
+                
+            }
+            </td>
+        </tr>
+    }
+    </table>
+
 </div>
