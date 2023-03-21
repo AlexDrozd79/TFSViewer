@@ -1,0 +1,39 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <div> <span>All features:</span> @Model.info.All.Count</div>
+    <div> <span>Waiting for evaluation:</span> @Model.info.WaitingForEvaluation.Count</div>
+    <div> <span>Waiting for groomimg:</span> @Model.info.WaitingForGrooming.Count</div>
+    <div> <span>Ready</span> @Model.info.Ready.Count</div>
+
+    <div>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+        <script>
+            var xValues = ["All", "Waiting for evaluation", "Waiting for groomimg", "Ready"];
+            var yValues = [@Model.info.All.Count, @Model.info.WaitingForEvaluation.Count, @Model.info.WaitingForGrooming.Count, @Model.info.Ready.Count];
+            var barColors = ["Yellow", "red", "blue", "green"];
+
+            new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "World Wine Production 2018"
+                    }
+                }
+            });
+        </script>
+    </div>
+</div>
