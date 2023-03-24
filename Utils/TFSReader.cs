@@ -42,7 +42,7 @@ public class QueryExecutor
 
 
         // create instance of work item tracking http client
-        using (var httpClient = new WorkItemTrackingHttpClient(new Uri(Configuration.GetValue<string>("URI")??""), credentials))
+        using (var httpClient = new WorkItemTrackingHttpClient(new Uri(Configuration.GetValue<string>("uri")??""), credentials))
         {
             // execute the query to get the list of work items in the results
             var result = httpClient.QueryByWiqlAsync(wiql);
