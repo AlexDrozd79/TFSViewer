@@ -10,6 +10,7 @@ using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
 
+
 public class QueryExecutor
 {
     private readonly IConfiguration Configuration;
@@ -61,6 +62,7 @@ public class QueryExecutor
 
     }
 
+    
     private VssCredentials CreateCredentials()
     {
         NetworkCredential networkCredential = new NetworkCredential(Configuration.GetValue<string>("user"), Configuration.GetValue<string>("password"));

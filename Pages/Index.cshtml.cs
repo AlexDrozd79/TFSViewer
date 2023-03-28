@@ -18,8 +18,12 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
+
+        BusinessLogic.Releases releases = new BusinessLogic.Releases(Configuration);
+        string currentRelease = releases.GetCurrentRelease("NeoAppAgile");
+        
         BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
-        var workItems = features.QueryFeatures("NeoAppAgile");
+        var workItems = features.QueryFeatures("NeoAppAgile", currentRelease);
         info = new FeaturesInfo( workItems.ToList());
     }
 }

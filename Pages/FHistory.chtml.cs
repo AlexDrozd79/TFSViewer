@@ -22,8 +22,11 @@ public class FHistoryModel : PageModel
 
     public void OnGet()
     {
+        BusinessLogic.Releases releases = new BusinessLogic.Releases(Configuration);
+        string currentRelease = releases.GetCurrentRelease("NeoAppAgile");
+
         BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
-        var workItems = features.QueryFeatures("NeoAppAgile", ParseDate(date));
+        var workItems = features.QueryFeatures("NeoAppAgile", currentRelease, ParseDate(date));
         info = new FeaturesInfo(workItems.ToList());
     }
 
