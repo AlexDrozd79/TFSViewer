@@ -10,6 +10,8 @@ public class IndexModel : PageModel
     private readonly IConfiguration Configuration;
     public FeaturesInfo info;
 
+    public List<string> Releases = new List<string>();
+
     public IndexModel(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -25,5 +27,10 @@ public class IndexModel : PageModel
         BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
         var workItems = features.QueryFeatures("NeoAppAgile", currentRelease);
         info = new FeaturesInfo( workItems.ToList());
+
+        Releases = releases.GetReleases("NeoAppAgile");
+
+        
     }
+
 }

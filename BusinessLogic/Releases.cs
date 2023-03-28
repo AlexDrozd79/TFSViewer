@@ -20,6 +20,20 @@ public class Releases
         Configuration = configuration;
     }
 
+    public List<string> GetReleases(string project)
+    {
+        List<string> releases = new List<string>();
+        string currentRelease = GetCurrentRelease(project);
+        string[] parts = currentRelease.Split("-");
+        DateTime currentDate = new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 1);
+        for (DateTime dt = currentDate.AddMonths(-5); dt <= currentDate.AddMonths(3); dt = dt.AddMonths(1))
+        {
+            releases.Add(dt.Year + "-" + dt.Month);
+        }
+
+        return releases;
+    }
+
     public string GetCurrentRelease(string project)
     {
         string result = "";
