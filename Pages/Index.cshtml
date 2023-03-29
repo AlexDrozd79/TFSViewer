@@ -10,83 +10,77 @@
     <div>
         <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
         <script>
-            var xValues = ["Waiting for evaluation", "Waiting for groomimg", "Ready"];
-            var yValues = [@Model.info.WaitingForEvaluation.Count, @Model.info.WaitingForGrooming.Count, @Model.info.Ready.Count];
-            var barColors = ["red", "blue", "green"];
-            var tags = ["WFE", "WFG", "OK"];
 
-            const chart = new Chart("myChart", {
-                type: "doughnut",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        backgroundColor: barColors,
-                        data: yValues,
-                        tag: tags
-                    }]
-                },
-                options: {
-                    legend: { display: true },
-                    onClick: (e) => {
-                        var activePoints = chart.getElementsAtEvent(e);
-                        if (activePoints.length > 0) {
-                            //get the internal index of slice in pie chart
-                            var clickedElementindex = activePoints[0]["_index"];
+            function DrawChart(yData) {
+                var xValues = ["Waiting for evaluation", "Waiting for groomimg", "Ready"];
+                var yValues = yData;
+                var barColors = ["red", "blue", "green"];
+                var tags = ["WFE", "WFG", "OK"];
 
-                            //get specific label by index 
-                            var tag = chart.data.datasets[0].tag[clickedElementindex];
+                const chart = new Chart("myChart", {
+                    type: "doughnut",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            backgroundColor: barColors,
+                            data: yValues,
+                            tag: tags
+                        }]
+                    },
+                    options: {
+                        legend: { display: true },
+                        onClick: (e) => {
+                            var activePoints = chart.getElementsAtEvent(e);
+                            if (activePoints.length > 0) {
+                                //get the internal index of slice in pie chart
+                                var clickedElementindex = activePoints[0]["_index"];
 
-                            $("table.data-table").addClass("hidden");
-                            $("#" + tag).removeClass("hidden");
+                                //get specific label by index 
+                                var tag = chart.data.datasets[0].tag[clickedElementindex];
 
+                                $("table.data-table").addClass("hidden");
+                                $("#" + tag).removeClass("hidden");
+
+                            }
                         }
                     }
+                });
+            }
+
+            function GetDisplayName(field) {
+                var result = "";
+                if (field != null) {
+                    result = field.displayName;
                 }
+                return result;
+            }
+
+            function DrawTable(items, tag) {
+                $("#" + tag).empty();
+                $(items).each(function (index, value) {
+                    $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+                });
+            }
+
+            function DrawTables(info) {
+                DrawTable(info.waitingForEvaluation, "WFE");
+                DrawTable(info.waitingForGrooming, "WFG");
+                DrawTable(info.ready, "OK");
+            }
+
+            $(document).ready(function () {
+                $.ajax("/api/Features/").done(function (info) {
+                    DrawChart([info.waitingForEvaluation.length, info.waitingForGrooming.length, info.ready.length]);
+                    DrawTables(info);
+                })
             });
         </script>
     </div>
 
-    <table id="WFE" class="data-table hidden">
+    <table id="WFE" class="data-table hidden"></table>
 
-        @foreach (var item in @Model.info.WaitingForEvaluation)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Fields["System.Title"]</td>
-                <td>@((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
-                </td>
-            </tr>
-        }
-    </table>
+    <table id="WFG" class="data-table hidden"></table>
 
-    <table id="WFG" class="data-table hidden">
-    @foreach (var item in @Model.info.WaitingForGrooming)
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Fields["System.Title"]</td>
-            <td>@((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
-            </td>
-        </tr>
-    }
-    </table>
+    <table id="OK" class="data-table hidden"></table>
 
-    <table id="OK" class="data-table hidden">
-    @foreach (var item in @Model.info.Ready)
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Fields["System.Title"]</td>
-            <td>@{
-                if (item.Fields.Keys.Contains("System.AssignedTo"))
-                {
-                    @((item.Fields["System.AssignedTo"] as Microsoft.VisualStudio.Services.WebApi.IdentityRef)?.DisplayName)
-                }
-                
-            }
-            </td>
-        </tr>
-    }
-    </table>
-    
 </div>
