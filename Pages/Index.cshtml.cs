@@ -8,26 +8,21 @@ namespace TFSViewer.Pages;
 public class IndexModel : PageModel
 {
     private readonly IConfiguration Configuration;
-    public FeaturesInfo info;
 
     public List<string> Releases = new List<string>();
+
+    public string CurrentRelease {get; set;} = "";
 
     public IndexModel(IConfiguration configuration)
     {
         Configuration = configuration;
-        info = new FeaturesInfo(new List<WorkItem>());
     }
 
     public void OnGet()
     {
 
         BusinessLogic.Releases releases = new BusinessLogic.Releases(Configuration);
-        string currentRelease = releases.GetCurrentRelease("NeoAppAgile");
-        
-        BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
-        var workItems = features.QueryFeatures("NeoAppAgile", currentRelease);
-        info = new FeaturesInfo( workItems.ToList());
-
+        CurrentRelease = releases.GetCurrentRelease("NeoAppAgile");
         Releases = releases.GetReleases("NeoAppAgile");
 
         

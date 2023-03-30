@@ -21,12 +21,16 @@ namespace TFSViewer.Controllers
         }
 
         // GET: api/TodoItems
-        [HttpGet]
-        public FeaturesInfo GetFeatures()
+        [HttpGet("{release?}")]
+        public FeaturesInfo GetFeatures(string release = "")
         {
 
             BusinessLogic.Releases releases = new BusinessLogic.Releases(Configuration);
-            string currentRelease = releases.GetCurrentRelease("NeoAppAgile");
+            string currentRelease = release;
+            if (string.IsNullOrWhiteSpace(currentRelease))
+            {
+                currentRelease = releases.GetCurrentRelease("NeoAppAgile");
+            }
 
             BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
             var workItems = features.QueryFeatures("NeoAppAgile", currentRelease);
