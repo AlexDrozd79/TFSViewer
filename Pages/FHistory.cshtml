@@ -6,7 +6,21 @@
 
 <div class="text-center">
 
-
+    <div id="controls">
+        <select id="releases">
+            @foreach (var item in Model.Releases)
+            {
+                if (@item == Model.CurrentRelease)
+                {
+                    <option value="@item" selected>@item</option>
+                }
+                else
+                {
+                    <option value="@item">@item</option>
+                }
+            }
+        </select>
+    </div>
 
 
     <table id="WFE" class="data-table">

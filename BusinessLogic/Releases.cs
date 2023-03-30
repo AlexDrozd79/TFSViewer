@@ -13,15 +13,25 @@ using TFSViewer.Utils;
 
 public class Releases
 {
-    public static List<string> GetReleases()
+    public static List<string> GetReleases(DateTime? startDate = null, DateTime? endDate = null)
     {
         List<string> releases = new List<string>();
-        string currentRelease = GetCurrentRelease();
-        string[] parts = currentRelease.Split("-");
-        DateTime currentDate = new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 1);
-        for (DateTime dt = currentDate; dt <= currentDate.AddMonths(3); dt = dt.AddMonths(1))
+        DateTime fromDate = GetDateOfCurrentRelease();
+        DateTime toDate = fromDate.AddMonths(3);
+
+        if (startDate.HasValue)
         {
-            releases.Add(dt.Year + "-" + (dt.Month.ToString().Length == 1 ? "0" + dt.Month: dt.Month) );
+            fromDate = startDate.Value;
+        }
+
+        if (endDate.HasValue)
+        {
+            toDate = endDate.Value;
+        }
+
+        for (DateTime dt = fromDate; dt <= toDate; dt = dt.AddMonths(1))
+        {
+            releases.Add(dt.Year + "-" + (dt.Month.ToString().Length == 1 ? "0" + dt.Month : dt.Month));
         }
 
         return releases;
@@ -31,7 +41,7 @@ public class Releases
     {
         string result = "";
         DateTime currentDate = DateTime.Today;
-        
+
         string query = "Select [Id] " +
                     "From WorkItems " +
                     "Where [System.TeamProject] = '" + Config.Project + "' " +
@@ -46,5 +56,12 @@ public class Releases
 
         return result;
 
-    } 
+    }
+
+    public static DateTime GetDateOfCurrentRelease()
+    {
+        string currentRelease = GetCurrentRelease();
+        string[] parts = currentRelease.Split("-");
+        return new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 1);
+    }
 }

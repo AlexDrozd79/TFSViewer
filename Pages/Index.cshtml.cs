@@ -8,16 +8,10 @@ namespace TFSViewer.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly IConfiguration Configuration;
-
     public List<string> Releases = new List<string>();
 
     public string CurrentRelease {get; set;} = "";
 
-    public IndexModel(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
 
     public void OnGet()
     {

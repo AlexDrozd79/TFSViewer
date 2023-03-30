@@ -13,6 +13,10 @@ public class FHistoryModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string? date { get; set; }
 
+    public List<string> Releases = new List<string>();
+
+    public string CurrentRelease { get; set; } = "";
+
 
     public FHistoryModel(IConfiguration configuration)
     {
@@ -21,9 +25,12 @@ public class FHistoryModel : PageModel
 
     public void OnGet()
     {
-        string currentRelease = Releases.GetCurrentRelease();
 
-        var workItems = Features.QueryFeatures(currentRelease, ParseDate(date));
+        CurrentRelease = BusinessLogic.Releases.GetCurrentRelease();
+        DateTime dt = BusinessLogic.Releases.GetDateOfCurrentRelease();
+        Releases = BusinessLogic.Releases.GetReleases(dt.AddMonths(-5), dt);
+
+        var workItems = Features.QueryFeatures(CurrentRelease, ParseDate(date));
         info = new FeaturesInfo(workItems.ToList());
     }
 
