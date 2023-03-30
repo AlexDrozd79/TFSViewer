@@ -89,12 +89,12 @@
             }
 
             $(document).ready(function () {
-                $.ajax("/api/Features/").done(function (info) {
+                $.ajax("api/Features/").done(function (info) {
                     DrawData(info);
                 });
 
                 $("#releases").change(function () {
-                    $.ajax("/api/Features/" + $(this).val()).done(function (info) {
+                    $.ajax("api/Features/" + $(this).val()).done(function (info) {
                         DrawData(info);
                     });
                 });
