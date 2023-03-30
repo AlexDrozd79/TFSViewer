@@ -14,12 +14,8 @@ using TFSViewer.Utils;
 public class Bugs
 {
 
-    private readonly IConfiguration Configuration;
-    public Bugs(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-    public IList<WorkItem> QueryOpenBugs(string project, string? assignedTo = null, DateTime? date = null)
+   
+    public IList<WorkItem> QueryOpenBugs(string? assignedTo = null, DateTime? date = null)
     {
         DateTime currentDate = DateTime.Today;
         if (date.HasValue)
@@ -29,11 +25,10 @@ public class Bugs
 
         string query = "Select [Id] " +
                     "From WorkItems " +
-                    "Where [System.TeamProject] = '" + project + "' " +
+                    "Where [System.TeamProject] = '" + Config.Project + "' " +
                     "AND [System.WorkItemType] <> ''  AND [System.State] <> 'Closed' AND [System.State] <> 'Resolved' AND [System.State] <> 'Removed'" + (!string.IsNullOrWhiteSpace(assignedTo) ? " AND [System.AssignedTo] = '" + assignedTo + "' " : " ") +
                     "Order By [State] Asc, [Changed Date] Desc ASOF '" + currentDate.ToString("MM-dd-yyyy") + "'";
-        QueryExecutor queryExecutor = new QueryExecutor(Configuration);
-        return queryExecutor.ExecuteQuery(query);
+        return QueryExecutor.ExecuteQuery(query);
     }
 
 }

@@ -11,15 +11,9 @@ using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
 using TFSViewer.Utils;
 
-public class Features
+public static class Features
 {
-    private readonly IConfiguration Configuration;
-    public Features(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
-    public IList<WorkItem> QueryFeatures(string project, string release,  DateTime? date = null)
+    public static IList<WorkItem> QueryFeatures(string release,  DateTime? date = null)
     {
 
         DateTime currentDate = DateTime.Today;
@@ -30,12 +24,11 @@ public class Features
 
         string query = "Select [Id] " +
                     "From WorkItems " +
-                    "Where [System.TeamProject] = '" + project + "' " +
+                    "Where [System.TeamProject] = '" + Config.Project + "' " +
                     "AND [System.WorkItemType] = 'Feature' AND  [System.State] <> 'Closed' AND  [System.State] <> 'Removed' and [NG.Release] = '" + release + "' and [System.AreaPath] under 'NeoAppAgile\\Lotteries'" +
                     "Order By [ID] Asc  ASOF '" + currentDate.ToString("MM-dd-yyyy") + "'";
 
-        QueryExecutor queryExecutor = new QueryExecutor(Configuration);
-        return queryExecutor.ExecuteQuery(query);
+        return QueryExecutor.ExecuteQuery(query);
 
     }
 

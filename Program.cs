@@ -29,4 +29,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+TFSViewer.Utils.Config.Init(app.Services.GetRequiredService<IConfiguration>());
+
 app.Run();

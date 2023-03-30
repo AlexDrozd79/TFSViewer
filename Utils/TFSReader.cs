@@ -13,8 +13,6 @@ using Microsoft.VisualStudio.Services.Common;
 
 public class QueryExecutor
 {
-    private readonly IConfiguration Configuration;
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="QueryExecutor" /> class.
     /// </summary>
@@ -26,12 +24,9 @@ public class QueryExecutor
     ///     A Personal Access Token, find out how to create one:
     ///     <see href="/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops" />.
     /// </param>
-    public QueryExecutor(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
+   
 
-    public IList<WorkItem> ExecuteQuery(string WIQL)
+    public static IList<WorkItem> ExecuteQuery(string WIQL)
     {
         VssCredentials credentials = CreateCredentials();
 
@@ -43,7 +38,7 @@ public class QueryExecutor
 
 
         // create instance of work item tracking http client
-        using (var httpClient = new WorkItemTrackingHttpClient(new Uri(Configuration.GetValue<string>("uri")??""), credentials))
+        using (var httpClient = new WorkItemTrackingHttpClient(new Uri(Config.URI ?? ""), credentials))
         {
             // execute the query to get the list of work items in the results
             var result = httpClient.QueryByWiqlAsync(wiql);
@@ -63,9 +58,9 @@ public class QueryExecutor
     }
 
     
-    private VssCredentials CreateCredentials()
+    private static VssCredentials CreateCredentials()
     {
-        NetworkCredential networkCredential = new NetworkCredential(Configuration.GetValue<string>("user"), Configuration.GetValue<string>("password"));
+        NetworkCredential networkCredential = new NetworkCredential(Config.User, Config.Password);
         Microsoft.VisualStudio.Services.Common.WindowsCredential winCred = new Microsoft.VisualStudio.Services.Common.WindowsCredential(networkCredential);
         VssCredentials credentials = new VssCredentials(winCred);
         return credentials;

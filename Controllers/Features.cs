@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Enteties;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TFSViewer.BusinessLogic;
 
 namespace TFSViewer.Controllers
 {
@@ -12,32 +13,18 @@ namespace TFSViewer.Controllers
     [ApiController]
     public class FeaturesController : ControllerBase
     {
-
-        private readonly IConfiguration Configuration;
-
-        public FeaturesController(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        // GET: api/TodoItems
         [HttpGet("{release?}")]
         public FeaturesInfo GetFeatures(string release = "")
         {
-
-            BusinessLogic.Releases releases = new BusinessLogic.Releases(Configuration);
             string currentRelease = release;
             if (string.IsNullOrWhiteSpace(currentRelease))
             {
-                currentRelease = releases.GetCurrentRelease("NeoAppAgile");
+                currentRelease = Releases.GetCurrentRelease();
             }
 
-            BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
-            var workItems = features.QueryFeatures("NeoAppAgile", currentRelease);
+            var workItems = Features.QueryFeatures(currentRelease);
             return new FeaturesInfo(workItems.ToList());
+
         }
-
-
-
     }
 }

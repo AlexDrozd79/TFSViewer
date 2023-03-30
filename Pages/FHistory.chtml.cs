@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Enteties;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using TFSViewer.BusinessLogic;
 
 namespace TFSViewer.Pages;
 
 public class FHistoryModel : PageModel
 {
-    private readonly IConfiguration Configuration;
     public FeaturesInfo info;
 
     [BindProperty(SupportsGet = true)]
@@ -16,17 +16,14 @@ public class FHistoryModel : PageModel
 
     public FHistoryModel(IConfiguration configuration)
     {
-        Configuration = configuration;
         info = new FeaturesInfo(new List<WorkItem>());
     }
 
     public void OnGet()
     {
-        BusinessLogic.Releases releases = new BusinessLogic.Releases(Configuration);
-        string currentRelease = releases.GetCurrentRelease("NeoAppAgile");
+        string currentRelease = Releases.GetCurrentRelease();
 
-        BusinessLogic.Features features = new BusinessLogic.Features(Configuration);
-        var workItems = features.QueryFeatures("NeoAppAgile", currentRelease, ParseDate(date));
+        var workItems = Features.QueryFeatures(currentRelease, ParseDate(date));
         info = new FeaturesInfo(workItems.ToList());
     }
 

@@ -13,17 +13,10 @@ using TFSViewer.Utils;
 
 public class Releases
 {
-
-    private readonly IConfiguration Configuration;
-    public Releases(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
-    public List<string> GetReleases(string project)
+    public static List<string> GetReleases()
     {
         List<string> releases = new List<string>();
-        string currentRelease = GetCurrentRelease(project);
+        string currentRelease = GetCurrentRelease();
         string[] parts = currentRelease.Split("-");
         DateTime currentDate = new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 1);
         for (DateTime dt = currentDate; dt <= currentDate.AddMonths(3); dt = dt.AddMonths(1))
@@ -34,19 +27,18 @@ public class Releases
         return releases;
     }
 
-    public string GetCurrentRelease(string project)
+    public static string GetCurrentRelease()
     {
         string result = "";
         DateTime currentDate = DateTime.Today;
         
         string query = "Select [Id] " +
                     "From WorkItems " +
-                    "Where [System.TeamProject] = '" + project + "' " +
+                    "Where [System.TeamProject] = '" + Config.Project + "' " +
                     "AND [System.WorkItemType] = 'Feature' AND  [System.State] <> 'Closed' AND  [System.State] <> 'Removed' and [System.AreaPath] under 'NeoAppAgile\\Lotteries' " +
                     "AND [System.IterationPath] UNDER  @currentIteration('[NeoAppAgile]\\Happy3Friends <id:33416386-7af4-4260-9888-83f99242a272>')";
 
-        QueryExecutor queryExecutor = new QueryExecutor(Configuration);
-        IList<WorkItem> items = queryExecutor.ExecuteQuery(query);
+        IList<WorkItem> items = QueryExecutor.ExecuteQuery(query);
         if (items.Count > 0)
         {
             result = items[0].Fields["NG.Release"].ToString() ?? "";
