@@ -13,7 +13,12 @@ public class FHistoryModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string? date { get; set; }
 
+    [BindProperty(SupportsGet = true)]
+    public string? team { get; set; }
+
     public List<string> Releases = new List<string>();
+
+    public List<string> Teams = new List<string>();
 
     public string CurrentRelease { get; set; } = "";
 
@@ -30,6 +35,8 @@ public class FHistoryModel : PageModel
         DateTime dt = BusinessLogic.Releases.GetDateOfCurrentRelease();
         Releases = BusinessLogic.Releases.GetReleases(dt.AddMonths(-5), dt);
 
+        Teams = BusinessLogic.Teams.QueryTeams().ToList();
+
         var workItems = Features.QueryFeatures(CurrentRelease, ParseDate(date));
         info = new FeaturesInfo(workItems.ToList());
     }
@@ -43,4 +50,6 @@ public class FHistoryModel : PageModel
         }
         return result;
     }
+
+                       
 }

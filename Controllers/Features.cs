@@ -13,8 +13,7 @@ namespace TFSViewer.Controllers
     [ApiController]
     public class FeaturesController : ControllerBase
     {
-        [HttpGet("{release?}")]
-        public FeaturesInfo GetFeatures(string release = "")
+        public FeaturesInfo GetFeatures(string release = "", string date = "", string areapath = "")
         {
             string currentRelease = release;
             if (string.IsNullOrWhiteSpace(currentRelease))
@@ -22,7 +21,13 @@ namespace TFSViewer.Controllers
                 currentRelease = Releases.GetCurrentRelease();
             }
 
-            var workItems = Features.QueryFeatures(currentRelease);
+            DateTime? currentDate = null;
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+               currentDate = DateTime.ParseExact(date, "yyyy-MM-dd", null);
+            }
+
+            var workItems = Features.QueryFeatures(currentRelease, currentDate, areapath);
             return new FeaturesInfo(workItems.ToList());
 
         }
