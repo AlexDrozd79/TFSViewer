@@ -22,6 +22,9 @@
     <div>
         <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
         <script>
+            var url = new URL(window.location.href);
+            var mode = url.searchParams.get("mode");
+            mode = (mode == null ? "" : mode.toLowerCase());
 
             function DrawChart(yData) {
                 var xValues = ["Waiting for evaluation", "Waiting for groomimg", "Ready"];
@@ -42,9 +45,9 @@
                     },
                     options: {
                         tooltips: {
-                            enabled: false
+                            enabled: mode == "widget"
                         },
-                        legend: { display: true },
+                        legend: { display: mode != "widget" },
                         events: ['click'],
                         onClick: (e) => {
                             var activePoints = chart.getElementsAtEvent(e);
@@ -55,9 +58,13 @@
                                 //get specific label by index 
                                 var tag = chart.data.datasets[0].tag[clickedElementindex];
 
-                                $("table.data-table").addClass("hidden");
-                                $("#" + tag).removeClass("hidden");
-
+                                if (mode == "widget") {
+                                    window.open("selectedfeatures?release=" + $("#releases").val() + "&mode=" + tag)
+                                }
+                                else {
+                                    $("table.data-table").addClass("hidden");
+                                    $("#" + tag).removeClass("hidden");
+                                }
                             }
                         },
                         plugins: {
@@ -101,7 +108,9 @@
 
             function DrawData(info) {
                 DrawChart([info.waitingForEvaluation.length, info.waitingForGrooming.length, info.ready.length]);
-                DrawTables(info);
+                if (mode != "widget") {
+                    DrawTables(info);
+                }
                 $("table.data-table").addClass("hidden");
             }
 
