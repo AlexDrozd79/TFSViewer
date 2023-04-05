@@ -1,5 +1,5 @@
 Add due date to features table
 Display in red in case due date passed
-Add numbers to chart
+Add numbers to chart - DONE
 Read configs into static class
 

@@ -1,0 +1,50 @@
+@page
+@model SelectedFeatures
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <div>
+        <script>
+
+            function GetDisplayName(field) {
+                var result = "";
+                if (field != null) {
+                    result = field.displayName;
+                }
+                return result;
+            }
+
+            function DrawTable(items, tag) {
+                $("#" + tag).empty();
+                $(items).each(function (index, value) {
+                    $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+                });
+            }
+
+
+            $(document).ready(function () {
+                var url = new URL(window.location.href);
+                var release = url.searchParams.get("release");
+                var mode = url.searchParams.get("mode");
+                $.ajax("api/Features/?release=" + release).done(function (info) {
+                    switch (mode.toUpperCase()) {
+                        case "WFE":
+                            DrawTable(info.waitingForEvaluation, "features");
+                            break;
+                        case "WFG":
+                            DrawTable(info.waitingForGrooming, "features");
+                            break;
+                        case "OK":
+                            DrawTable(info.ready, "features");
+                            break;
+                    }
+                });
+            });
+        </script>
+    </div>
+
+    <table id="features" class="data-table"></table>
+
+</div>
