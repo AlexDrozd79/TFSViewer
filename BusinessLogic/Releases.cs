@@ -13,6 +13,9 @@ using TFSViewer.Utils;
 
 public class Releases
 {
+    private static string CurrentRelease = "";
+
+    private static object locker = new Object();
     public static List<string> GetReleases(DateTime? startDate = null, DateTime? endDate = null)
     {
         List<string> releases = new List<string>();
@@ -39,23 +42,27 @@ public class Releases
 
     public static string GetCurrentRelease()
     {
-        string result = "";
-        DateTime currentDate = DateTime.Today;
-
-        string query = "Select [Id] " +
-                    "From WorkItems " +
-                    "Where [System.TeamProject] = '" + Config.Project + "' " +
-                    "AND [System.WorkItemType] = 'Feature' AND  [System.State] <> 'Closed' AND  [System.State] <> 'Removed' and [System.AreaPath] under 'NeoAppAgile\\Lotteries' " +
-                    "AND [System.IterationPath] UNDER  @currentIteration('[NeoAppAgile]\\Happy3Friends <id:33416386-7af4-4260-9888-83f99242a272>')";
-
-        IList<WorkItem> items = QueryExecutor.ExecuteQuery(query);
-        if (items.Count > 0)
+        if (string.IsNullOrEmpty(CurrentRelease))
         {
-            result = items[0].Fields["NG.Release"].ToString() ?? "";
+            lock (locker)
+            {
+                if (string.IsNullOrEmpty(CurrentRelease))
+                {
+                    CurrentRelease = File.ReadAllText(AppContext.BaseDirectory + "data\\CurrentRelease.txt");
+                }
+            }
         }
 
-        return result;
+        return CurrentRelease;
+    }
 
+    public static void SetCurrentRelease(string release)
+    {
+        lock (locker)
+        {
+            File.WriteAllText(AppContext.BaseDirectory + "data\\CurrentRelease.txt", release);
+            CurrentRelease = release;
+        }
     }
 
     public static DateTime GetDateOfCurrentRelease()
