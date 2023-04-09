@@ -1,0 +1,70 @@
+﻿@page
+@model HighBugs
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+
+    <div id="controls">
+
+        <select id="areapath">
+            @foreach (var item in Model.Teams)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+
+        <input type="text" id="datepicker" size="30">
+
+        <button id="go">GO</button>
+    </div>
+
+
+    <table id="ALL" class="data-table"> </table>
+
+
+    <script>
+        var url = new URL(window.location.href);
+        var env = url.searchParams.get("env");
+        env = (env == null ? "prod" : env.toLowerCase());
+
+        function DrawTable(items, tag) {
+            $("#" + tag).empty();
+            $(items).each(function (index, value) {
+                $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+            });
+        }
+
+        function GetDisplayName(field) {
+            var result = "";
+            if (field != null) {
+                result = field.displayName;
+            }
+            return result;
+        }
+
+        $(document).ready(function () {
+
+            $("#datepicker").datepicker();
+            $("#datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
+
+            $("#go").click(function () {
+                $.ajax("api/Bugs/?environment=" + env +"&date=" + $("#datepicker").val() + "&areapath=" + $("#areapath").val()).done(function (bugs) {
+                    DrawTable(bugs, "ALL");
+                });
+            });
+
+            $.ajax("api/Bugs/?environment=" + env).done(function (bugs) {
+                DrawTable(bugs, "ALL");
+            });
+
+
+        });
+
+
+    </script>
+
+
+
+</div>
