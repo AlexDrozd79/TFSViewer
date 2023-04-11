@@ -18,6 +18,7 @@
         <input type="text" id="datepicker" size="30">
 
         <button id="go">GO</button>
+        <span class="count_label">Bugs count:</span><span id="count"></span>
     </div>
 
 
@@ -28,12 +29,21 @@
         var url = new URL(window.location.href);
         var env = url.searchParams.get("env");
         env = (env == null ? "prod" : env.toLowerCase());
+        var areaPath = url.searchParams.get("area");
+        var hideArea = url.searchParams.get("hidearea");
+
+        if (hideArea != null)
+        {
+            $("#areapath").hide();
+        }
+
 
         function DrawTable(items, tag) {
             $("#" + tag).empty();
             $(items).each(function (index, value) {
                 $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
             });
+            $("#count").text(items.length);
         }
 
         function GetDisplayName(field) {
@@ -50,12 +60,16 @@
             $("#datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
 
             $("#go").click(function () {
-                $.ajax("api/Bugs/?environment=" + env +"&date=" + $("#datepicker").val() + "&areapath=" + $("#areapath").val()).done(function (bugs) {
+                $.ajax("api/Bugs/?environment=" + env + "&date=" + $("#datepicker").val() + "&areapath=" + $("#areapath").val()).done(function (bugs) {
                     DrawTable(bugs, "ALL");
                 });
             });
 
-            $.ajax("api/Bugs/?environment=" + env).done(function (bugs) {
+            if (areaPath != null && areaPath != "") {
+                $("#areapath").val(areaPath);
+            }
+
+            $.ajax("api/Bugs/?environment=" + env + "&areapath=" + $("#areapath").val()).done(function (bugs) {
                 DrawTable(bugs, "ALL");
             });
 
