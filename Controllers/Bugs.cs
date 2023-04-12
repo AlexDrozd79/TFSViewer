@@ -16,7 +16,7 @@ namespace TFSViewer.Controllers
     {
         public List<WorkItem> GetBugsFromHighEnvironment(string environment, string areaPath = "", string date = "")
         {
-            DateTime? currentDate = null;
+            DateTime currentDate = DateTime.Today;
             if (!string.IsNullOrWhiteSpace(date))
             {
                 currentDate = DateTime.ParseExact(date, "yyyy-MM-dd", null);

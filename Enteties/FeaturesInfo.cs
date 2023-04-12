@@ -75,8 +75,8 @@ public class FeaturesInfo
 
     private string GetStringValue(IDictionary<string, object> fields, string fieldName)
     {
-        string? result = "";
-        object? val;
+        string result = "";
+        object val;
         if (fields.TryGetValue(fieldName, out val))
         {
             result = val?.ToString();

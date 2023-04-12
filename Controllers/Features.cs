@@ -21,7 +21,7 @@ namespace TFSViewer.Controllers
                 currentRelease = Releases.GetCurrentRelease();
             }
 
-            DateTime? currentDate = null;
+            DateTime currentDate = DateTime.Today;
             if (!string.IsNullOrWhiteSpace(date))
             {
                currentDate = DateTime.ParseExact(date, "yyyy-MM-dd", null);

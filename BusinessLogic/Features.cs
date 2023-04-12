@@ -13,14 +13,10 @@ using TFSViewer.Utils;
 
 public static class Features
 {
-    public static IList<WorkItem> QueryFeatures(string release,  DateTime? date = null, string? areaPath = "")
+    public static IList<WorkItem> QueryFeatures(string release,  DateTime date, string areaPath = "")
     {
 
-        DateTime currentDate = DateTime.Today;
-        if (date.HasValue)
-        {
-            currentDate = date.Value;
-        }
+        DateTime currentDate = date;
 
         if (string.IsNullOrWhiteSpace(areaPath))
         {

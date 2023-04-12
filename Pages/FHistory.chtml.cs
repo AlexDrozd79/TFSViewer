@@ -11,10 +11,10 @@ public class FHistoryModel : PageModel
     public FeaturesInfo info;
 
     [BindProperty(SupportsGet = true)]
-    public string? date { get; set; }
+    public string date { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public string? team { get; set; }
+    public string team { get; set; }
 
     public List<string> Releases = new List<string>();
 
@@ -41,7 +41,7 @@ public class FHistoryModel : PageModel
         info = new FeaturesInfo(workItems.ToList());
     }
 
-    private DateTime ParseDate(string? date)
+    private DateTime ParseDate(string date)
     {
         DateTime result = DateTime.Today;
         if (!string.IsNullOrWhiteSpace(date))

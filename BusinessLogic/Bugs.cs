@@ -15,28 +15,23 @@ public class Bugs
 {
 
 
-    public static IList<WorkItem> QueryOpenBugs(string? assignedTo = null, DateTime? date = null)
+    public static IList<WorkItem> QueryOpenBugs(string assignedTo = null, DateTime date = default)
     {
-        DateTime currentDate = DateTime.Today;
-        if (date.HasValue)
-        {
-            currentDate = date.Value;
-        }
 
         string query = "Select [Id] " +
                     "From WorkItems " +
                     "Where [System.TeamProject] = '" + Config.Project + "' " +
                     "AND [System.WorkItemType] <> ''  AND [System.State] <> 'Closed' AND [System.State] <> 'Resolved' AND [System.State] <> 'Removed'" + (!string.IsNullOrWhiteSpace(assignedTo) ? " AND [System.AssignedTo] = '" + assignedTo + "' " : " ") +
-                    "Order By [State] Asc, [Changed Date] Desc ASOF '" + currentDate.ToString("MM-dd-yyyy") + "'";
+                    "Order By [State] Asc, [Changed Date] Desc ASOF '" + date.ToString("MM-dd-yyyy") + "'";
         return QueryExecutor.ExecuteQuery(query);
     }
 
-    public static IList<WorkItem> GetUATBugs(string? areaPath = null, DateTime? date = null)
+    public static IList<WorkItem> GetUATBugs(string areaPath = null, DateTime date = default)
     {
         DateTime currentDate = DateTime.Today;
-        if (date.HasValue)
+        if (date != default)
         {
-            currentDate = date.Value;
+            currentDate = date;
         }
 
         if (string.IsNullOrWhiteSpace(areaPath))
@@ -55,12 +50,12 @@ public class Bugs
         return QueryExecutor.ExecuteQuery(query);
     }
 
-     public static IList<WorkItem> GetProductionBugs(string? areaPath = null, DateTime? date = null)
+     public static IList<WorkItem> GetProductionBugs(string areaPath = null, DateTime date = default)
     {
         DateTime currentDate = DateTime.Today;
-        if (date.HasValue)
+        if (date != default)
         {
-            currentDate = date.Value;
+            currentDate = date;
         }
 
         if (string.IsNullOrWhiteSpace(areaPath))
