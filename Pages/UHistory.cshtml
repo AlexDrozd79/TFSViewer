@@ -1,0 +1,99 @@
+﻿@page
+@model UHistoryModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+
+    <div id="controls">
+        <select id="releases">
+            @foreach (var item in Model.Releases.Select(a => a.ReleaseName))
+            {
+                if (@item == Model.CurrentRelease)
+                {
+                    <option value="@item" selected>@item</option>
+                }
+                else
+                {
+                    <option value="@item">@item</option>
+                }
+            }
+        </select>
+
+        <select id="areapath">
+            @foreach (var item in Model.Teams)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+
+        <input type="text" id="datepicker1" size="30">
+        <input type="text" id="datepicker2" size="30">
+
+        <button id="go">GO</button>
+    </div>
+
+
+    <table id="ALL" class="data-table"> </table>
+
+
+
+    <script>
+        var releasesData = @Json.Serialize(Model.Releases.ToArray());
+
+        function DrawTable(items, tag) {
+            $("#" + tag).empty();
+            $(items).each(function (index, value) {
+                $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+            });
+        }
+
+        function GetDisplayName(field) {
+            var result = "";
+            if (field != null) {
+                result = field.displayName;
+            }
+            return result;
+        }
+
+        $(document).ready(function () {
+
+            var releaseIndex = $("#releases")[0].selectedIndex;
+
+            $("#datepicker1").datepicker();
+            $("#datepicker1").datepicker("option", "dateFormat", "yy-mm-dd");
+            $("#datepicker1").val(releasesData[releaseIndex].startDate);
+
+            $("#datepicker2").datepicker();
+            $("#datepicker2").datepicker("option", "dateFormat", "yy-mm-dd");
+            $("#datepicker2").val(releasesData[releaseIndex].endDate);
+
+
+            $("#releases").change(function () {
+                releaseIndex = $(this)[0].selectedIndex;
+                $("#datepicker1").val(releasesData[releaseIndex].startDate);
+                $("#datepicker2").val(releasesData[releaseIndex].endDate);
+            });
+
+
+
+            $("#go").click(function () {
+                $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                    DrawTable(info, "ALL");
+                });
+            });
+
+            $.ajax("api/UserStories/").done(function (info) {
+                DrawTable(info, "ALL");
+            });
+
+
+        });
+
+
+    </script>
+
+
+
+</div>

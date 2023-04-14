@@ -10,10 +10,14 @@ using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
 using TFSViewer.Utils;
+using TFSViewer.Enteties;
+using Microsoft.Data.Sqlite;
 
 public class Releases
 {
     private static string CurrentRelease = "";
+
+    private static List<Release> _releases = new List<Release>();
 
     private static object locker = new Object();
     public static List<string> GetReleases(DateTime? startDate = null, DateTime? endDate = null)
@@ -38,6 +42,53 @@ public class Releases
         }
 
         return releases;
+    }
+
+    public static List<Release> GetReleases(short beforeCurrent, short afterCurrent)
+    {
+        InitReleasesIfNeeded();
+        string current = Releases.GetCurrentRelease();
+        int index = _releases.FindIndex(0, _releases.Count, a => a.ReleaseName.ToLower() == current.ToLower());
+        return _releases.Take(new Range(index - beforeCurrent, index + afterCurrent + 1)).ToList();
+
+    }
+
+    private static void InitReleasesIfNeeded()
+    {
+        if (_releases.Count == 0)
+        {
+            lock (locker)
+            {
+                if (_releases.Count == 0)
+                {
+                    using (var connection = new SqliteConnection("Data Source=" + AppContext.BaseDirectory + "data\\tfs.db"))
+                    {
+                        connection.Open();
+
+                        var command = connection.CreateCommand();
+                        command.CommandText =
+                        @"
+                            SELECT Release, StartDate, EndDate
+                            FROM Releases
+                        ";
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+
+                                _releases.Add(new Release()
+                                {
+                                    ReleaseName = reader.GetString(0),
+                                    StartDate = reader.GetDateTime(1),
+                                    EndDate = reader.GetDateTime(2)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static string GetCurrentRelease()

@@ -1,4 +1,4 @@
-namespace Enteties;
+namespace TFSViewer.Enteties;
 
 public class Release
 {
@@ -6,6 +6,6 @@ public class Release
 
     public DateTime StartDate {get; set;}
 
-    public DateTime EndtDate {get; set;}
+    public DateTime EndDate {get; set;}
 
 }
