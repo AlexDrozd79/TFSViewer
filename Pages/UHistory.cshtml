@@ -42,11 +42,46 @@
     <script>
         var releasesData = @Json.Serialize(Model.Releases.ToArray());
 
-        function DrawTable(items, tag) {
+        function DrawTable(info1, info2, tag) {
+
+            var common = [];
+            var removed = [];
+            var added = [];
+
+            for (var i = 0; i < info1.length; i++) {
+                if (findItem(info1[i].id, info2)) {
+                    common.push(info1[i]);
+                }
+                else {
+                    removed.push(info1[i]);
+                }
+            }
+
+            for (var i = 0; i < info2.length; i++) {
+                if (!findItem(info2[i].id, info1)) {
+                    added.push(info2[i]);
+                }
+            }
+
             $("#" + tag).empty();
-            $(items).each(function (index, value) {
+            $(common).each(function (index, value) {
                 $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
             });
+            $(removed).each(function (index, value) {
+                $("#" + tag).append('<tr class="removed"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+            });
+            $(added).each(function (index, value) {
+                $("#" + tag).append('<tr class="added"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+            });
+        }
+
+        function findItem(id, items) {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].id == id) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function GetDisplayName(field) {
@@ -63,29 +98,39 @@
 
             $("#datepicker1").datepicker();
             $("#datepicker1").datepicker("option", "dateFormat", "yy-mm-dd");
-            $("#datepicker1").val(releasesData[releaseIndex].startDate);
+            $("#datepicker1").val(releasesData[releaseIndex].startDate.split('T')[0]);
 
             $("#datepicker2").datepicker();
             $("#datepicker2").datepicker("option", "dateFormat", "yy-mm-dd");
-            $("#datepicker2").val(releasesData[releaseIndex].endDate);
+            $("#datepicker2").val(releasesData[releaseIndex].endDate.split('T')[0]);
 
 
             $("#releases").change(function () {
                 releaseIndex = $(this)[0].selectedIndex;
-                $("#datepicker1").val(releasesData[releaseIndex].startDate);
-                $("#datepicker2").val(releasesData[releaseIndex].endDate);
+                $("#datepicker1").val(releasesData[releaseIndex].startDate.split('T')[0]);
+                $("#datepicker2").val(releasesData[releaseIndex].endDate.split('T')[0]);
             });
 
 
 
             $("#go").click(function () {
                 $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
-                    DrawTable(info, "ALL");
+                    var info1 = info;
+                    $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker2").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                        var info2 = info;
+                        DrawTable(info1, info2, "ALL");
+                    })
                 });
             });
 
             $.ajax("api/UserStories/").done(function (info) {
-                DrawTable(info, "ALL");
+                $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                    var info1 = info;
+                    $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker2").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                        var info2 = info;
+                        DrawTable(info1, info2, "ALL");
+                    })
+                });
             });
 
 

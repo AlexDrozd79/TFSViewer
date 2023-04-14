@@ -30,3 +30,14 @@ body {
 {
   border-style:double;
 }
+
+.removed
+{
+  background-color: brown;
+  color: white;
+}
+
+.added
+{
+  background-color:aquamarine;
+}
