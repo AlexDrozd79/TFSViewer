@@ -24,7 +24,7 @@ public class QueryExecutor
     ///     A Personal Access Token, find out how to create one:
     ///     <see href="/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops" />.
     /// </param>
-   
+
 
     public static IList<WorkItem> ExecuteQuery(string WIQL)
     {
@@ -46,18 +46,69 @@ public class QueryExecutor
             var ids = result.Result.WorkItems.Select(item => item.Id).ToArray();
 
             // some error handling
+            IList<WorkItem> items = Array.Empty<WorkItem>();
             if (ids.Length == 0)
             {
-                return Array.Empty<WorkItem>();
+                return items;
             }
 
-            return httpClient.GetWorkItemsAsync(ids, null, null,  WorkItemExpand.Relations).Result;
+            try
+            {
+                items = httpClient.GetWorkItemsAsync(ids, null, null).Result;
+            }
+            catch (System.AggregateException ex)
+            {
+                items = HandleAggregateException(ids, httpClient, ex);
+            }
+
+            return items;
         }
 
 
     }
 
-    
+    private static IList<WorkItem> HandleAggregateException(int[] ids, WorkItemTrackingHttpClient httpClient, AggregateException ex)
+    {
+        IList<WorkItem> items = new List<WorkItem>();
+        bool hasResult = false;
+        int count = 0;
+
+        do
+        {
+            ids = RemoveCorruptedID(ex, ids);
+
+            try
+            {
+                items = httpClient.GetWorkItemsAsync(ids, null, null).Result;
+                hasResult = true;
+            }
+            catch (System.AggregateException ex2)
+            {
+                ids = RemoveCorruptedID(ex2, ids);
+                hasResult = false;
+                count++;
+            }
+        }
+        while (!hasResult && count <= 3);
+
+        return items;
+    }
+
+    private static int[] RemoveCorruptedID(AggregateException ex, int[] ids)
+    {
+        if (ex.Message.Contains("TF401232"))
+        {
+            string itemID = ex.Message.Split("Work item")[1].Split("does not exist")[0].Trim();
+            ids = ids.Where(i => i != int.Parse(itemID)).ToArray();
+        }
+        else
+        {
+            throw ex;
+        }
+        return ids;
+    }
+
+
     private static VssCredentials CreateCredentials()
     {
         NetworkCredential networkCredential = new NetworkCredential(Config.User, Config.Password);
