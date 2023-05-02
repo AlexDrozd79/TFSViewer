@@ -1,0 +1,128 @@
+﻿@page
+@model UCloseInReleaseModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+
+    <div id="controls">
+        <select id="releases">
+            @foreach (var item in Model.Releases.Select(a => a.ReleaseName))
+            {
+                if (@item == Model.CurrentRelease)
+                {
+                    <option value="@item" selected>@item</option>
+                }
+                else
+                {
+                    <option value="@item">@item</option>
+                }
+            }
+        </select>
+
+        <select id="areapath">
+            @foreach (var item in Model.Teams)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+
+        <button id="go">GO</button>
+
+        <span id="endRelease"></span>
+    </div>
+
+
+    <table id="ALL" class="data-table"> </table>
+
+
+
+    <script>
+        var releasesData = @Json.Serialize(Model.Releases.ToArray());
+
+
+        function DrawTable(info, tag) {
+
+            var releaseIndex = $("#releases")[0].selectedIndex;
+            var endDate = releasesData[releaseIndex].endDate.split('T')[0];
+
+
+            $("#" + tag).empty();
+            $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td></tr>');
+            $(info).each(function (index, value) {
+                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
+                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td></tr>');
+            });
+
+        }
+
+        function GetClassName(DueDate, CloseDate) {
+            var className = "undefined";
+            if (DueDate != null && CloseDate != null) {
+
+                var d1 = new Date(DueDate);
+                d1 = new Date(d1.toDateString())
+                var d2 = new Date(CloseDate);
+                d2 = new Date(d2.toDateString())
+
+                if (d2 > d1) {
+                    className = "delayed";
+                }
+                else {
+                    className = "intime";
+                }
+            }
+
+            return className;
+        }
+
+        function GetDateFieldValue(field) {
+            var result = "";
+            if (field != null) {
+                var d = new Date(field);
+                result = d.toDateString();
+            }
+            return result;
+
+        }
+
+        function GetDisplayName(field) {
+            var result = "";
+            if (field != null) {
+                result = field.displayName;
+            }
+            return result;
+        }
+
+        $(document).ready(function () {
+
+            $("#releases").change(function () {
+                releaseIndex = $(this)[0].selectedIndex;
+                $("#endRelease").text("End date of release: " + releasesData[releaseIndex].endDate.split('T')[0]);
+            });
+
+            $("#go").click(function () {
+                $.ajax("api/UserStories/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                    DrawTable(info, "ALL");
+                });
+            });
+
+            $.ajax("api/UserStories/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                DrawTable(info, "ALL");
+            });
+
+
+            var releaseIndex = $("#releases")[0].selectedIndex;
+            $("#endRelease").text("End date of release: " + releasesData[releaseIndex].endDate.split('T')[0]);
+
+
+
+        });
+
+
+    </script>
+
+
+
+</div>
