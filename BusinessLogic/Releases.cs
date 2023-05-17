@@ -66,6 +66,21 @@ public class Releases
                         connection.Open();
 
                         var command = connection.CreateCommand();
+
+                        command.CommandText = "SELECT Iteration, Release FROM Iterations";
+
+                        List<Tuple<string, string>> iterations = new List<Tuple<string, string>>();
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                iterations.Add(Tuple.Create(reader.GetString(0),reader.GetString(1)));
+                            }
+                        }
+
+                     
+
                         command.CommandText =
                         @"
                             SELECT Release, StartDate, EndDate
@@ -81,7 +96,8 @@ public class Releases
                                 {
                                     ReleaseName = reader.GetString(0),
                                     StartDate = reader.GetDateTime(1),
-                                    EndDate = reader.GetDateTime(2)
+                                    EndDate = reader.GetDateTime(2),
+                                    Iterations = iterations.Where(item => item.Item2 == reader.GetString(0)).Select(i => i.Item1).ToList()
                                 });
                             }
                         }
@@ -90,6 +106,7 @@ public class Releases
             }
         }
     }
+
 
     public static string GetCurrentRelease()
     {

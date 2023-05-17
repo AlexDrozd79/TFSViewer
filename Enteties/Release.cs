@@ -8,4 +8,6 @@ public class Release
 
     public DateTime EndDate {get; set;}
 
+    public List<String> Iterations {get; set;}
+
 }

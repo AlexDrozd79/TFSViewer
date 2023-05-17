@@ -54,7 +54,21 @@ public class QueryExecutor
 
             try
             {
-                items = httpClient.GetWorkItemsAsync(ids, null, null).Result;
+                if (ids.Length <= 200)
+                {
+                    items = httpClient.GetWorkItemsAsync(ids, null, null).Result; 
+                }
+                else
+                {
+                    List<WorkItem> lst = new List<WorkItem>(); 
+                    while (ids.Length > 0)
+                    {
+                            lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, null).Result); 
+                            ids = ids.Skip(200).ToArray();
+                    }
+                    items = lst;
+                }
+
             }
             catch (System.AggregateException ex)
             {
@@ -111,10 +125,12 @@ public class QueryExecutor
 
     private static VssCredentials CreateCredentials()
     {
-        NetworkCredential networkCredential = new NetworkCredential(Config.User, Config.Password);
-        Microsoft.VisualStudio.Services.Common.WindowsCredential winCred = new Microsoft.VisualStudio.Services.Common.WindowsCredential(networkCredential);
-        VssCredentials credentials = new VssCredentials(winCred);
-        return credentials;
+        return new  VssBasicCredential(string.Empty, Config.PersonalAccessToken); 
+
+        // NetworkCredential networkCredential = new NetworkCredential(Config.User, Config.Password);
+        // Microsoft.VisualStudio.Services.Common.WindowsCredential winCred = new Microsoft.VisualStudio.Services.Common.WindowsCredential(networkCredential);
+        // VssCredentials credentials = new VssCredentials(winCred);
+        // return credentials;
     }
 
 

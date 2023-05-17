@@ -2,4 +2,6 @@ Add due date to features table
 Display in red in case due date passed
 Add numbers to chart - DONE
 Read configs into static class
-
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - Add 1 day to and of release.
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - add tag to table. (FBReview)
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - display in red in case tag "follow-up"
