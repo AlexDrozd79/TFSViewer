@@ -9,9 +9,12 @@ trigger:
 pool:
   vmImage: windows-latest
 
+
+
 stages:
   - stage: main
     displayName: "main"
+    
     jobs:
       - job: build
         steps:
@@ -35,6 +38,7 @@ stages:
       - deployment: MainDeploy
         displayName: 'Main deploy'
         environment: 'TFSViewer.VM-ALEXEYD-10'
+        dependsOn: Publish
           
 
          
