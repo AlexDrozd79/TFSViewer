@@ -9,16 +9,23 @@ trigger:
 pool:
   vmImage: windows-latest
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use Dot Net'
-  inputs:
-    version: '7.x'
-  
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
+stages:
+  - stage: main
+    displayName: "main"
+    jobs:
+      - job: build
+        steps:
+        - task: UseDotNet@2
+          displayName: 'Use Dot Net'
+          inputs:
+            version: '7.x'
+          
+        - task: DotNetCoreCLI@2
+          displayName: Build
+          inputs:
+            command: 'build'
+            projects: '**/*.csproj'
+
+        
 
 
