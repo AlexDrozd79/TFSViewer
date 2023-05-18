@@ -28,11 +28,8 @@ stages:
 
       - deployment: MainDeploy
         displayName: 'Main deploy'
-        environment: 
-         name: TFSViewer
-         resourceName: VM-ALEXEYD-10
-         resourceType: virtualMachine
-
+        environment: 'TFSViewer.VM-ALEXEYD-10'
+        
 
          
 
