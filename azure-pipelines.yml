@@ -4,51 +4,65 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- none
 
 pool:
-  vmImage: windows-latest
+  vmImage: 'windows-latest'
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution: '**/RoundTheCode.AzureTestProject.sln'
+  project: '**/RoundTheCode.AzureTestProject.csproj'
+
+steps:
+- task: NuGetToolInstaller@1
+  name: 'NuGetToolInstaller'
+  displayName: 'NuGet tool installer'
+
+- task: NuGetCommand@2
+  name: 'NuGetRestore'
+  displayName: 'NuGet restore packages'
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(solution)'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  name: 'Tests'
+  displayName: 'Run tests'
+  inputs:
+    command: 'test'
+    projects: '$(solution)'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  name: 'Publish'
+  displayName: 'Publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(project)'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: false
 
 stages:
-  - stage: main
-    displayName: "main"
-    jobs:
-      - job: build
-        steps:
-        - task: UseDotNet@2
-          displayName: 'Use Dot Net'
-          inputs:
-            version: '7.x'
+  - stage: DeployWebsite
+    displayName: 'Deploy website'        
+    pool:
+      vmImage: windows-latest
+    
+    jobs:    
+    - deployment: DeployWebsite
+      displayName: 'Deploy website'
+      environment: 'Production.DAVE'
+      strategy:
+       runOnce:
+         deploy:           
+          steps:
+          - checkout: none
           
-        - task: DotNetCoreCLI@2
-          displayName: Build
-          inputs:
-            command: 'build'
-            projects: '**/*.csproj'
-
-        - task: DotNetCoreCLI@2
-          displayName: Publish
-          inputs:
-            command: publish
-            projects: '**/*.csproj'
-        
-      - deployment: MainDeploy
-        displayName: 'Main deploy'
-        environment: 'TFSViewer.VM-ALEXEYD-10'
-        strategy:
-           runOnce:
-              deploy:           
-                steps:
-          
-                  - download: 'buildPipeline'
-                    name: 'DownloadBuildArtifacts'            
-                    displayName: 'Download build artifacts'
-                    artifact: 'TFSViewer'
-                  
-
-         
-
-
-
-
-
+          - download: 'buildPipeline'
+            name: 'DownloadBuildArtifacts'            
+            displayName: 'Download build artifacts'
+            artifact: 'AzureTestProject'
