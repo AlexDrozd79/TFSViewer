@@ -26,6 +26,16 @@ stages:
             command: 'build'
             projects: '**/*.csproj'
 
-        
+      - deployment: MainDeploy
+        displayName: 'Main deploy'
+        environment: 
+         name: TFSViewer
+         resourceName: VM-ALEXEYD-10
+         resourceType: virtualMachine
+
+         
+
+
+
 
 
