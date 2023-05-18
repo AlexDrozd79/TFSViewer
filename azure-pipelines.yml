@@ -32,6 +32,7 @@ stages:
          name: TFSViewer
          resourceName: VM-ALEXEYD-10
          resourceType: virtualMachine
+         resourceId: VM-ALEXEYD-10
 
          
 
