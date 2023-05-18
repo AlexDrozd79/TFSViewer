@@ -35,7 +35,17 @@ stages:
       - deployment: MainDeploy
         displayName: 'Main deploy'
         environment: 'TFSViewer.VM-ALEXEYD-10'
+        strategy:
+           runOnce:
+              deploy:           
+                steps:
+                  - checkout: none
           
+                  - download: 'buildPipeline'
+                    name: 'DownloadBuildArtifacts'            
+                    displayName: 'Download build artifacts'
+                    artifact: 'TFSViewer'
+                  
 
          
 
