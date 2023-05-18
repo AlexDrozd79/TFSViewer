@@ -11,6 +11,7 @@ pool:
 
 steps:
 - task: UseDotNet@2
+  displayName: 'Use Dot Net'
   inputs:
     version: '7.x'
   
