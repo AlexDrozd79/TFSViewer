@@ -28,7 +28,7 @@ jobs:
   displayName: Deploy to VM
   environment: 
    name: VMenv
-   resourcesNAme: VMenv
+   resourcesNAme: VM-ALEXEYD-10
    resourceType: virtualMachine
   strategy:
      runOnce:
