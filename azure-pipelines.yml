@@ -18,17 +18,13 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
   
-- task: DotNetCoreCLI@2
-    inputs:
-      command: 'build'
-      projects: '**/TFSViewer.csproj'
-      
+ 
 jobs:
 - deployment: VMDeploy
   displayName: Deploy to VM
   environment: 
    name: VMenv
-   resourcesNAme: VM-ALEXEYD-10
+   resourcesNAme: VMenv
    resourceType: virtualMachine
   strategy:
      runOnce:
