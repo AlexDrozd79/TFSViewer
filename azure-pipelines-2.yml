@@ -1,0 +1,39 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+variables:
+  IISWebSite: 'tfsutils'
+
+resources:
+ pipelines:
+     - pipeline: 'buildPipeline'
+       project: 'AzureTestProject'
+       source: 'Build pipeline'
+       branch: 'main'
+
+stages:
+  - stage: DeployWebsite
+    displayName: 'Deploy website'
+    pool:
+      vmImage: windows-latest
+    
+    jobs:
+    - deployment: DeployWebsite
+      displayName: 'Deploy website'
+      environment: 'Windows 11 server.DAVE'
+      strategy:
+       runOnce:
+           deploy:
+            steps:
+                - checkout: none
+
+                - download: 'buildPipeline'
+                  name: 'DownloadBuildArtifacts'
+                  displayName: 'Download Build Artifacts'
+                  artifact: 'TFSViewerArtifacts'
+                
