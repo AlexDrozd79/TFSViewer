@@ -4,45 +4,18 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- none
 
 pool:
-  vmImage: windows-latest
+  vmImage: 'windows-latest'
 
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution: '**/RoundTheCode.AzureTestProject.sln'
+  project: '**/RoundTheCode.AzureTestProject.csproj'
 
-
-stages:
-  - stage: main
-    displayName: "main"
-    
-    jobs:
-      - job: build
-        steps:
-        - task: UseDotNet@2
-          displayName: 'Use Dot Net'
-          inputs:
-            version: '7.x'
-          
-        - task: DotNetCoreCLI@2
-          displayName: Build
-          inputs:
-            command: 'build'
-            projects: '**/*.csproj'
-
-        - task: DotNetCoreCLI@2
-          displayName: Publish
-          inputs:
-            command: publish
-            projects: '**/*.csproj'
-        
-      - deployment: MainDeploy
-        displayName: 'Main deploy'
-        environment: 'TFSViewer.VM-ALEXEYD-10'
-        dependsOn: Publish
-          
-
-         
-
-
-
-
+steps:
+- task: NuGetToolInstaller@1
+  name: 'NuGetToolInstaller'
+  displayName: 'NuGet tool installer'
