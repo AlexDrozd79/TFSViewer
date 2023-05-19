@@ -12,7 +12,7 @@ variables:
 resources:
  pipelines:
      - pipeline: buildPipeline  
-       project:  $(System.TeamProject)
+       project: 'TFSViewer'
        source: 'Build'
        branch: 'main'
 
