@@ -11,7 +11,8 @@ variables:
 
 resources:
  pipelines:
-     - pipeline: Build  
+     - pipeline: buildPipeline  
+       project: TFSViewer
        source: 'Build'
        branch: 'main'
 
