@@ -24,7 +24,7 @@ stages:
     jobs:
     - deployment: DeployWebsite
       displayName: 'Deploy website'
-      environment: 'Windows 11 server.DAVE'
+      environment: 'TFSViewer.VM-ALEXEY-10'
       strategy:
        runOnce:
            deploy:
