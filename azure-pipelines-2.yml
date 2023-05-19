@@ -14,9 +14,7 @@ resources:
      - pipeline: 'buildPipeline'  
        source: 'Build pipeline'
        branch: 'main'
-       tags:
-         - Production
-
+      
 stages:
   - stage: DeployWebsite
     displayName: 'Deploy website'
