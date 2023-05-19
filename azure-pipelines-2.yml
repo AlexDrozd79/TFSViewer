@@ -12,7 +12,6 @@ variables:
 resources:
  pipelines:
      - pipeline: Build  
-       project: 'TFSViewer'
        source: 'Build'
        branch: 'main'
 
