@@ -14,7 +14,7 @@ resources:
      - pipeline: 'buildPipeline'  
        source: 'Build pipeline'
        branch: 'main'
-       
+       version: '20230519.4'
 
 stages:
   - stage: DeployWebsite
