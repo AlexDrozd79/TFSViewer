@@ -12,7 +12,7 @@ variables:
 resources:
  pipelines:
      - pipeline: 'buildPipeline'
-       project: 'AzureTestProject'
+       project: 'TFSViewer'
        source: 'Build'
        branch: 'main'
 
