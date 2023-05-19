@@ -11,10 +11,8 @@ variables:
 
 resources:
  pipelines:
-     - pipeline:
-       project: 'TFSViewer'
-       source: 'Build pipeline'
-       branch: 'main'
+     - pipeline: 'buildPipeline'
+      
 
 stages:
   - stage: DeployWebsite
