@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- none
+- main
 
 variables:
   IISWebSite: 'tfsutils'
@@ -14,7 +14,6 @@ resources:
      - pipeline: 'buildPipeline'  
        source: 'Build pipeline'
        branch: 'main'
-       version: latest
        
 
 stages:
