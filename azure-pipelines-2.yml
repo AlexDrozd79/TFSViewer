@@ -14,6 +14,7 @@ resources:
      - pipeline: 'buildPipeline'  
        source: 'Build pipeline'
        branch: 'main'
+       project: TFSViewer
 
 stages:
   - stage: DeployWebsite
