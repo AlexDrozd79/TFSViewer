@@ -14,10 +14,7 @@ resources:
      - pipeline: 'buildPipeline'  
        source: 'Build pipeline'
        branch: 'main'
-       trigger:
-        branches:
-          include:
-            - master
+      
       
 stages:
   - stage: DeployWebsite
