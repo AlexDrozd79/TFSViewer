@@ -24,7 +24,7 @@ stages:
     jobs:
     - deployment: DeployWebsite
       displayName: 'Deploy website'
-      environment: 'TFSViewer.VM-ALEXEY-10'
+      environment: 'TFSViewer.VM-ALEXEYD-10'
       strategy:
        runOnce:
            deploy:
