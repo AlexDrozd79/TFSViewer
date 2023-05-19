@@ -13,7 +13,7 @@ resources:
  pipelines:
      - pipeline: 'buildPipeline'
        project: 'AzureTestProject'
-       source: 'Build pipeline'
+       source: 'Build'
        branch: 'main'
 
 stages:
