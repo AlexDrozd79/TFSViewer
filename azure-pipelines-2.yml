@@ -13,7 +13,6 @@ resources:
  pipelines:
      - pipeline: 'buildPipeline' 
        source: 'Build pipeline'
-       project: 'aaaa'
        branch: 'main'
        version: latest
       
