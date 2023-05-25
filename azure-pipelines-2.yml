@@ -51,6 +51,7 @@ stages:
                   inputs:
                       WebSiteName:  $(IISWebSite)
                       Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\repo'
+                      VirtualApplication : 'tfsutils'
                       TakeAppOfflineFlag: true
                   
                 - task: IISWebAppManagementOnMachineGroup@0
