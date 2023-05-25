@@ -33,7 +33,7 @@ stages:
             steps:
                 - checkout: none
 
-                - script: echo $(IISWebSite)
+                - script: echo 'last version'
 
             
                 - task: IISWebAppManagementOnMachineGroup@0
