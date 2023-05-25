@@ -14,7 +14,8 @@ resources:
      - pipeline: 'buildPipeline' 
        source: 'Build pipeline'
        branch: 'main'
-       version: $(Date:yyyyMMdd).$(Rev:r)
+       
+       
       
       
 stages:
