@@ -15,6 +15,7 @@ resources:
        project: 'TFSViewer' 
        source: 'Build pipeline'
        branch: 'main'
+       version: latest
       
       
 stages:
