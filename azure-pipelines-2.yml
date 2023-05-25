@@ -1,0 +1,65 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+variables:
+  IISWebSite: 'default web site'
+
+resources:
+ pipelines:
+     - pipeline: 'buildPipeline' 
+       source: 'Build pipeline'
+       branch: 'main'
+      
+      
+stages:
+  - stage: DeployWebsite
+    displayName: 'Deploy website'
+    pool:
+      vmImage: windows-latest
+    
+    jobs:
+    - deployment: DeployWebsite
+      displayName: 'Deploy website'
+      environment: 'TFSViewer.VM-ALEXEYD-10'
+      strategy:
+       runOnce:
+           deploy:
+            steps:
+                
+                - download: 'buildPipeline'
+                  name: 'DownloadBuildArtifacts'
+                  displayName: 'Download Build Artifacts'
+                  artifact: 'TFSViewerArtifacts'
+
+            
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StopIIS'
+                  displayName: 'Stop IIS website'
+                  inputs:
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'StopWebsite'
+                    StartStopWebsiteName:  $(IISWebSite)
+                    
+                - task: IISWebAppDeploymentOnMachineGroup@0
+                  name: 'DeployIIS'
+                  displayName: 'Deploy to IIS'
+                  inputs:
+                      WebSiteName:  $(IISWebSite)
+                      Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\repo'
+                      VirtualApplication : 'tfsutils'
+                      TakeAppOfflineFlag: true
+                  
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StartIIS'
+                  displayName: 'Start IIS website'
+                  inputs:
+                      IISDeploymentType: 'IISWebsite'
+                      ActionIISWebsite: 'StartWebsite'
+                      StartStopWebsiteName:  $(IISWebSite)
+                    
+                    
