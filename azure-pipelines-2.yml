@@ -7,7 +7,7 @@ trigger:
 - main
 
 variables:
-  IISWebSite: 'VM-ALEXEYD-10'
+  IISWebSite: 'default web site'
 
 resources:
  pipelines:
@@ -35,11 +35,7 @@ stages:
 
                 - script: echo $(IISWebSite)
 
-                - download: 'buildPipeline'
-                  name: 'DownloadBuildArtifacts'
-                  displayName: 'Download Build Artifacts'
-                  artifact: 'TFSViewerArtifacts'
-
+            
                 - task: IISWebAppManagementOnMachineGroup@0
                   name: 'StopIIS'
                   inputs:
