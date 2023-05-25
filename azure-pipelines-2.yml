@@ -32,7 +32,7 @@ stages:
        runOnce:
            deploy:
             steps:
-                
+
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
                   displayName: 'Download Build Artifacts'
