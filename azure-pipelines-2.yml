@@ -38,7 +38,7 @@ stages:
                   displayName: 'Download Build Artifacts'
                   artifact: 'TFSViewerArtifacts'
                 
-                - script: echo ${{ variables.IISWebsiteName }}
+                - script: echo '${{ variables.IISWebsiteName }}'
 
 
                 - task: IISWebAppManagementOnMachineGroup@0
