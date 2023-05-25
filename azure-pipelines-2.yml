@@ -31,7 +31,6 @@ stages:
        runOnce:
            deploy:
             steps:
-                - checkout: none
 
                 - script: echo 'last version'
 
