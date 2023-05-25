@@ -43,3 +43,4 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'TFSViewerArtifacts'
     publishLocation: 'Container'
+    TargetPath: ''
