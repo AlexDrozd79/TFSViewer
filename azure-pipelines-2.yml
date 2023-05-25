@@ -46,6 +46,7 @@ stages:
                     
                 - task: IISWebAppDeploymentOnMachineGroup@0
                   name: 'DeployIIS'
+                  displayName: 'Deploy to IIS'
                   inputs:
                       WebSiteName:  $(IISWebSite)
                       Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\TFSViewer'
