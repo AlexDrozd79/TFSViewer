@@ -51,3 +51,11 @@ stages:
                       WebSiteName: '${{ variables.IISWebsiteName }}'
                       Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\TFSViewer'
                       TakeAppOfflineFlag: true
+                  
+                -task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StartIIS'
+                  displayName: 'Start IIS website'                     
+                  inputs:
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'StartWebsite'
+                    StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
