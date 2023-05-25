@@ -17,7 +17,7 @@ public class Tasks
     public static IList<WorkItem> QueryTasks(string release, DateTime date, string areaPath)
     {
 
-        string[] iterations = Releases.GetReleases(0, 0).Where(r => r.ReleaseName == release).SelectMany(r => r.Iterations).ToArray();
+        string[] iterations = Releases.GetReleases(5, 0).Where(r => r.ReleaseName == release).SelectMany(r => r.Iterations).ToArray();
 
         string itrExpr = " and (";
         for (int i = 0; i < iterations.Length; i++)

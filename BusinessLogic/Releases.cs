@@ -49,7 +49,8 @@ public class Releases
         InitReleasesIfNeeded();
         string current = Releases.GetCurrentRelease();
         int index = _releases.FindIndex(0, _releases.Count, a => a.ReleaseName.ToLower() == current.ToLower());
-        return _releases.Take(new Range(index - beforeCurrent, index + afterCurrent + 1)).ToList();
+        var releases = _releases.Take(new Range(index - beforeCurrent, index + afterCurrent + 1)).ToList();
+        return releases;
 
     }
 
