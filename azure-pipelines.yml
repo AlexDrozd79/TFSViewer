@@ -16,7 +16,8 @@ variables:
 
 steps:
 
-- script: echo '$(Pipeline.Workspace)'
+- checkout: self
+  path: "/"
 - task: NuGetToolInstaller@1
   name: 'NuGetToolInstaller'
   displayName: 'NuGet tool installer'
