@@ -32,7 +32,8 @@ stages:
            deploy:
             steps:
                 
-                - bash: echo '$(System.DefaultWorkingDirectory)'
+                - script: echo '$(System.DefaultWorkingDirectory)'
+                - script: echo ' $(Build.ArtifactStagingDirectory)'
 
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
