@@ -33,7 +33,7 @@ stages:
             steps:
                 - checkout: none
 
-                - script: echo '$(variables.IISWebSite)'
+                - script: echo $(IISWebSite)
 
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
