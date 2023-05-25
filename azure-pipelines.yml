@@ -17,7 +17,7 @@ variables:
 steps:
 
 - checkout: self
-  path: '$(Pipeline.Workspace)\repo'
+  path: 'repo'
 - task: NuGetToolInstaller@1
   name: 'NuGetToolInstaller'
   displayName: 'NuGet tool installer'
