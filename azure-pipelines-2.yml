@@ -7,7 +7,7 @@ trigger:
 - main
 
 variables:
-  IISWebSite: 'tfsutils'
+  IISWebSite: 'VM-ALEXEYD-10'
 
 resources:
  pipelines:
