@@ -56,7 +56,7 @@ stages:
                   displayName: 'Deploy to IIS'
                   inputs:
                       WebSiteName:  $(IISWebSite)
-                      Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\TFSViewer'
+                      Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts'
                       TakeAppOfflineFlag: true
                   
                 - task: IISWebAppManagementOnMachineGroup@0
