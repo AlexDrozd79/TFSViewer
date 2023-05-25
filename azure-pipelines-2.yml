@@ -38,3 +38,16 @@ stages:
                   displayName: 'Download Build Artifacts'
                   artifact: 'TFSViewerArtifacts'
                 
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StopIIS'
+                  inputs:
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'StopWebsite'
+                    StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                    
+                - task: IISWebAppDeploymentOnMachineGroup@0
+                  name: 'DeployIIS'
+                  inputs:
+                      WebSiteName: '${{ variables.IISWebsiteName }}'
+                      Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\TFSViewer'
+                      TakeAppOfflineFlag: true
