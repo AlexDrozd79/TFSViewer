@@ -31,6 +31,8 @@ stages:
        runOnce:
            deploy:
             steps:
+                
+                - bash: echo '$(System.DefaultWorkingDirectory)'
 
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
