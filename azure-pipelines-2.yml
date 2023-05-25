@@ -32,7 +32,10 @@ stages:
            deploy:
             steps:
 
-                - script: echo 'last version'
+                - download: 'buildPipeline'
+                  name: 'DownloadBuildArtifacts'
+                  displayName: 'Download Build Artifacts'
+                  artifact: 'TFSViewerArtifacts'
 
             
                 - task: IISWebAppManagementOnMachineGroup@0
