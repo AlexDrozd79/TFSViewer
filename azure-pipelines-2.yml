@@ -36,6 +36,7 @@ stages:
                 - script: echo ' $(Build.ArtifactStagingDirectory)'
                 - script: echo ' $(Pipeline.Workspace)'
 
+                
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
                   displayName: 'Download Build Artifacts'
