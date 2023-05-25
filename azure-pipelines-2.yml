@@ -38,6 +38,7 @@ stages:
             
                 - task: IISWebAppManagementOnMachineGroup@0
                   name: 'StopIIS'
+                  displayName: 'Stop IIS website'
                   inputs:
                     IISDeploymentType: 'IISWebsite'
                     ActionIISWebsite: 'StopWebsite'
