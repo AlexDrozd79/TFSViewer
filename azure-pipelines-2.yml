@@ -13,7 +13,7 @@ resources:
  pipelines:
      - pipeline: 'buildPipeline' 
        source: 'Build pipeline'
-       project: 'TFSViewer'
+       project: 'TFSViewerArtifacts'
        branch: 'main'
       
       
