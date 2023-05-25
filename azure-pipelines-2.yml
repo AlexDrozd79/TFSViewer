@@ -33,13 +33,12 @@ stages:
             steps:
                 - checkout: none
 
+                - script: echo '$(variables.IISWebSite)'
+
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
                   displayName: 'Download Build Artifacts'
                   artifact: 'TFSViewerArtifacts'
-                
-                - script: echo '${{ variables.IISWebsiteName }}'
-
 
                 - task: IISWebAppManagementOnMachineGroup@0
                   name: 'StopIIS'
