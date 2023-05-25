@@ -11,7 +11,8 @@ variables:
 
 resources:
  pipelines:
-     - pipeline: 'buildPipeline'  
+     - pipeline: 'buildPipeline' 
+       project: 'TFSViewer' 
        source: 'Build pipeline'
        branch: 'main'
       
