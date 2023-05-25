@@ -34,6 +34,7 @@ stages:
                 
                 - script: echo '$(System.DefaultWorkingDirectory)'
                 - script: echo ' $(Build.ArtifactStagingDirectory)'
+                - script: echo ' $(Pipeline.Workspace)'
 
                 - download: 'buildPipeline'
                   name: 'DownloadBuildArtifacts'
