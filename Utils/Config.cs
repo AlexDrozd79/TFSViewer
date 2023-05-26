@@ -4,7 +4,7 @@ using System;
 
 public static class Config
 {
-    //Config file wrapper
+    //Config file
     public static void Init(IConfiguration config)
     {
         User = config.GetValue<string>("user") ?? "";
