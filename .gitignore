@@ -1,6 +1,5 @@
 bin/
 obj/
 .vscode/
-appsettings.json
 azure-pipelines-2.yml
 azure-pipelines.yml

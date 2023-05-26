@@ -56,15 +56,15 @@ public class QueryExecutor
             {
                 if (ids.Length <= 200)
                 {
-                    items = httpClient.GetWorkItemsAsync(ids, null, null).Result; 
+                    items = httpClient.GetWorkItemsAsync(ids, null, null).Result;
                 }
                 else
                 {
-                    List<WorkItem> lst = new List<WorkItem>(); 
+                    List<WorkItem> lst = new List<WorkItem>();
                     while (ids.Length > 0)
                     {
-                            lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, null).Result); 
-                            ids = ids.Skip(200).ToArray();
+                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, null).Result);
+                        ids = ids.Skip(200).ToArray();
                     }
                     items = lst;
                 }
@@ -125,7 +125,9 @@ public class QueryExecutor
 
     private static VssCredentials CreateCredentials()
     {
-        return new  VssBasicCredential(string.Empty, Config.PersonalAccessToken); 
+
+        string personalToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Config.Token));
+        return new VssBasicCredential(string.Empty, personalToken);
 
 
         // NetworkCredential networkCredential = new NetworkCredential(Config.User, Config.Password);
