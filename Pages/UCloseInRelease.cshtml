@@ -54,15 +54,16 @@
             $("#" + tag).empty();
             $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'],isAddDay) + '"><td>' + value.id + '</td>'
+                var tagValue = GetFieldValue(value.fields, 'System.Tags');
+                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'], isAddDay, tagValue) + '"><td>' + value.id + '</td>'
                     + '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate'])
-                    + '</td><td>' + GetFieldValue(value.fields, 'System.Tags') + '</td></tr>');
+                    + '</td><td>' + tagValue + '</td></tr>');
             });
 
         }
 
-        function GetClassName(DueDate, CloseDate, isAddDay) {
+        function GetClassName(DueDate, CloseDate, isAddDay, tagValue) {
             var className = "undefined";
             if (DueDate != null && CloseDate != null) {
 
@@ -75,9 +76,7 @@
                     d1.setDate(d1.getDate() + 1); //Important. Added 1 day to end of release because lot of products close US after release finished
                 }
 
-
-
-                if (d2 > d1) {
+                if (d2 > d1 || isFollowUp(tagValue)) {
                     className = "delayed";
                 }
                 else {
@@ -86,6 +85,11 @@
             }
 
             return className;
+        }
+
+        function isFollowUp(tagValue) {
+            tagValue = tagValue.toLowerCase().trim().replaceAll(" ", "").replaceAll("-", "");
+            return tagValue == "followup"
         }
 
         function GetDateFieldValue(field) {
