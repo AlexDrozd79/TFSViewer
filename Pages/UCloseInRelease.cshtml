@@ -49,10 +49,12 @@
 
 
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
-                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td></tr>');
+                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td>' + value.id + '</td>' 
+                    +'<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
+                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) 
+                    + '</td><td>' + GetFieldValue(value.fields, 'System.Tags') + '</td></tr>');
             });
 
         }
@@ -91,6 +93,18 @@
             var result = "";
             if (field != null) {
                 result = field.displayName;
+            }
+            return result;
+        }
+
+
+         function GetFieldValue(fields, fieldName) {
+            var result = "";
+            
+            var isExists = fields.hasOwnProperty(fieldName);
+            
+            if (isExists) {
+                result = fields[fieldName];
             }
             return result;
         }
