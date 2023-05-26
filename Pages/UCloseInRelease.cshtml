@@ -31,6 +31,7 @@
         <button id="go">GO</button>
 
         <span id="endRelease"></span>
+        <input type="checkbox" checked id="checkAddDay" /><label>add additioan day to due date</label>
     </div>
 
 
@@ -40,26 +41,28 @@
 
     <script>
         var releasesData = @Json.Serialize(Model.Releases.ToArray());
+        var globalInfo = null;
 
 
         function DrawTable(info, tag) {
 
             var releaseIndex = $("#releases")[0].selectedIndex;
             var endDate = releasesData[releaseIndex].endDate.split('T')[0];
+            var isAddDay = $("#checkAddDay").is(':checked');
 
 
             $("#" + tag).empty();
             $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td>' + value.id + '</td>' 
-                    +'<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
-                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) 
+                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'],isAddDay) + '"><td>' + value.id + '</td>'
+                    + '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
+                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate'])
                     + '</td><td>' + GetFieldValue(value.fields, 'System.Tags') + '</td></tr>');
             });
 
         }
 
-        function GetClassName(DueDate, CloseDate) {
+        function GetClassName(DueDate, CloseDate, isAddDay) {
             var className = "undefined";
             if (DueDate != null && CloseDate != null) {
 
@@ -68,8 +71,11 @@
                 var d2 = new Date(CloseDate);
                 d2 = new Date(d2.toDateString())
 
-                d1.setDate(d1.getDate() + 1); //Important. Added 1 day to end of release because lot of products close US after release finished
-                
+                if (isAddDay) {
+                    d1.setDate(d1.getDate() + 1); //Important. Added 1 day to end of release because lot of products close US after release finished
+                }
+
+
 
                 if (d2 > d1) {
                     className = "delayed";
@@ -101,11 +107,11 @@
         }
 
 
-         function GetFieldValue(fields, fieldName) {
+        function GetFieldValue(fields, fieldName) {
             var result = "";
-            
+
             var isExists = fields.hasOwnProperty(fieldName);
-            
+
             if (isExists) {
                 result = fields[fieldName];
             }
@@ -113,6 +119,12 @@
         }
 
         $(document).ready(function () {
+
+
+            $("#checkAddDay").change(function () {
+                DrawTable(globalInfo, "ALL");
+            });
+
 
             $("#releases").change(function () {
                 releaseIndex = $(this)[0].selectedIndex;
@@ -122,11 +134,13 @@
             $("#go").click(function () {
                 $.ajax("api/UserStories/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                     DrawTable(info, "ALL");
+                    globalInfo = info;
                 });
             });
 
             $.ajax("api/UserStories/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                 DrawTable(info, "ALL");
+                globalInfo = info;
             });
 
 
