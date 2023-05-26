@@ -68,6 +68,9 @@
                 var d2 = new Date(CloseDate);
                 d2 = new Date(d2.toDateString())
 
+                d1.setDate(d1.getDate() + 1); //Important. Added 1 day to end of release because lot of products close US after release finished
+                
+
                 if (d2 > d1) {
                     className = "delayed";
                 }
