@@ -5,14 +5,22 @@
 }
 
 
+@{
 
+
+    string GetPath(string page)
+    {
+        string baseURL = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.Path);
+        return baseURL + page;
+    }
+}
 
 <div>
-    <a href="@Request.Scheme://@Request.Host/UHistory" class="UHistory menubtn"></a>
-    <a href="@Request.Scheme://@Request.Host/UCloseInRelease" class="UCloseInRelease menubtn"></a>
-    <a href="@Request.Scheme://@Request.Host/FReadines" class="FReadines menubtn"></a>
-    <a href="@Request.Scheme://@Request.Host/FHistory" class="FHistory menubtn"></a>
-    <a href="@Request.Scheme://@Request.Host/HighBugs" class="HighBugs menubtn"></a>
-    <a href="@Request.Scheme://@Request.Host/UCloseInTime" class="UCloseInTime menubtn"></a>
+    <a href='@GetPath("UHistory")' class="UHistory menubtn"></a>
+    <a href='@GetPath("UCloseInRelease")' class="UCloseInRelease menubtn"></a>
+    <a href='@GetPath("FReadines")' class="FReadines menubtn"></a>
+    <a href='@GetPath("FHistory")' class="FHistory menubtn"></a>
+    <a href='@GetPath("HighBugs")' class="HighBugs menubtn"></a>
+    <a href='@GetPath("UCloseInTime")' class="UCloseInTime menubtn"></a>
 
 </div>
