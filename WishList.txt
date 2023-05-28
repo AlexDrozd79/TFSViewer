@@ -1,7 +1,12 @@
 Add due date to features table
 Display in red in case due date passed
 Add numbers to chart - DONE
-Read configs into static class
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - Add 1 day to and of release.
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - add tag to table. (FBReview)
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - display in red in case tag "follow-up"
+Read configs into static class - DONE
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - Add 1 day to and of release. - DONE
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - add tag to table. (FBReview) - DONE
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - display in red in case tag "follow-up" - DONE
+
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark as red if due date passed (even without closedate)
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark US finished earlier in 3 days
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/tCloseInTime - mark task finished earlier in 20% (by default)
+
