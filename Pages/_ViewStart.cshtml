@@ -1,3 +1,24 @@
 ﻿@{
     Layout = "_Layout";
 }
+
+@{
+    string GetPath(string page)
+    {
+        string baseURL = string.Format("{0}://{1}{2}", Context.Request.Scheme, Context.Request.Host, Context.Request.PathBase);
+        return baseURL + "/" + page;
+    }
+}
+
+
+
+
+<div class="menu">
+    <a class="UHistory" href='@GetPath("UHistory")'>US history</a>
+    <a class="UCloseInRelease" href='@GetPath("UCloseInRelease")'>Closed in release</a>
+    <a class="FReadines" href='@GetPath("FReadines")'>Features rediness</a>
+    <a class="HighBugs" href='@GetPath("HighBugs")'>Bugs</a>
+    <a class="UCloseInTime" href='@GetPath("UCloseInTime")'>IS closed in time</a>
+</div>
+
+
