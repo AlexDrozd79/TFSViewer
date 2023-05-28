@@ -10,14 +10,17 @@
 
     string GetPath(string page)
     {
-        string baseURL = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.Path);
+        string basePath = "/";
+        if (!string.IsNullOrEmpty(Request.PathBase))
+        {
+            basePath = Request.PathBase;
+        }
+        string baseURL = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, basePath);
         return baseURL + page;
     }
 }
 
-Path : @Request.Path </br>
-PathBase : @Request.PathBase </br>
-QueryString: @Request.QueryString </br>
+
 
 
 <div>
