@@ -66,6 +66,11 @@
                 }
                 else {
                     className = "intime";
+                    var diffInDays = d1.getDate() - d2.getDate();
+                    if (diffInDays > 3)
+                    {
+                        className += " earlier";
+                    }
                 }
             }
             else {

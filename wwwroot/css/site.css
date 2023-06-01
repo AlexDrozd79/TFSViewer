@@ -29,6 +29,11 @@ html {
   background-color: aquamarine;
 }
 
+.intime.earlier
+{
+  font-weight: bold;
+}
+
 .table_header {
   font-weight: bold;
 }
