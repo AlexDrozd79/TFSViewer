@@ -52,10 +52,10 @@
 
 
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td></tr>');
             $(info).each(function (index, value) {
                 var tagValue = GetFieldValue(value.fields, 'System.Tags');
-                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'], isAddDay, tagValue) + '"><td>' + value.id + '</td>'
+                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'], isAddDay, tagValue) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>'
                     + '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate'])
                     + '</td><td>' + tagValue + '</td></tr>');
