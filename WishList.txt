@@ -6,6 +6,6 @@ https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - add tag 
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - display in red in case tag "follow-up" - DONE
 
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark as red if due date passed (even without closedate) - Done
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark US finished earlier in 3 days
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark US finished earlier in 3 days - Done
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/tCloseInTime - mark task finished earlier in 20% (by default)
 

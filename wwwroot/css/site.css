@@ -29,10 +29,6 @@ html {
   background-color: aquamarine;
 }
 
-.intime.earlier
-{
-  font-weight: bold;
-}
 
 .table_header {
   font-weight: bold;
@@ -157,4 +153,30 @@ html {
 
   -moz-box-flex: 1;
   /* Without this, Firefox 19- expands to widest paragraph, overrides width */
+}
+
+.status
+{
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 30px;
+  background-position: center;
+}
+
+
+.delayed  > .status
+{
+  background-image: url(img/close.png);
+  background-size: 50%;
+}
+
+.intime.earlier > .status
+{
+  background-image: url(img/star.png);
+  background-size: 80%;
+}
+
+.intime  > .status
+{
+  background-image: url(img/check.png);
 }

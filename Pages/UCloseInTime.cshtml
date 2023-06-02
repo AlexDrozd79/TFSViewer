@@ -44,9 +44,9 @@
 
 
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ClosedDate</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ClosedDate</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
+                $("#" + tag).append('<tr class="' + GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['NeoGames.DueDate']) + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td></tr>');
             });
 
