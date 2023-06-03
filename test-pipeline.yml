@@ -57,7 +57,7 @@ stages:
            deploy:
             steps:
 
-                - download: 'buildPipeline'
+                - download: current
                   name: 'DownloadBuildArtifacts'
                   displayName: 'Download Build Artifacts'
                   artifact: 'TFSViewerArtifacts'
