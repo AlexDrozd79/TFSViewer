@@ -12,6 +12,8 @@ trigger:
 pool:
   vmImage: windows-latest
   
+variables:
+  project: '**/TFSViewer.csproj'
 
 stages:
   - stage: first
@@ -35,6 +37,8 @@ stages:
               projects: '$(project)'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
               zipAfterPublish: false
+             
+
             
         - task: PublishBuildArtifacts@1
           inputs:
