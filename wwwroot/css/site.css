@@ -64,8 +64,13 @@ html {
 }
 
 .UHistory {
-  background-image: url(img/notebook.png);
+  background-image: url(img/time-check.png);
 }
+
+.TCloseInTime {
+  background-image: url(img/checkbox.png);
+}
+
 
 .menu {
   -webkit-box-ordinal-group: 1;
@@ -83,7 +88,7 @@ html {
   /* OLD - iOS 6-, Safari 3.1-6 */
   -moz-box-flex: 1;
   /* OLD - Firefox 19- */
-  width: 250px;
+  width: 300px;
   /* For old syntax, otherwise collapses. */
   -webkit-flex: 1;
   /* Chrome */
@@ -92,7 +97,7 @@ html {
   flex: 1;
   /* NEW, Spec - Opera 12.1, Firefox 20+ */
   border-right: 1px solid gray;
-  max-width: 250px;
+  max-width: 300px;
   margin-right: 10px;
 }
 
@@ -106,7 +111,7 @@ html {
   padding-left: 36px;
   text-decoration: none;
   display: block;
-  width: 250px;
+  width: 300px;
   margin-bottom: 10px;
   line-height: 32px;
 }
@@ -155,8 +160,7 @@ html {
   /* Without this, Firefox 19- expands to widest paragraph, overrides width */
 }
 
-.status
-{
+.status {
   background-size: contain;
   background-repeat: no-repeat;
   width: 30px;
@@ -164,19 +168,16 @@ html {
 }
 
 
-.delayed  > .status
-{
+.delayed>.status {
   background-image: url(img/close.png);
   background-size: 50%;
 }
 
-.intime.earlier > .status
-{
+.intime.earlier>.status {
   background-image: url(img/star.png);
   background-size: 80%;
 }
 
-.intime  > .status
-{
+.intime>.status {
   background-image: url(img/check.png);
 }
