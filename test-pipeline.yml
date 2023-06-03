@@ -61,6 +61,7 @@ stages:
                   name: 'DownloadBuildArtifacts'
                   displayName: 'Download Build Artifacts'
                   artifact: 'TFSViewerArtifacts'
+                  target: '$(Pipeline.Workspace)'
 
             
                 - task: IISWebAppManagementOnMachineGroup@0
