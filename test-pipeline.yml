@@ -14,9 +14,10 @@ pool:
   
 variables:
   project: '**/TFSViewer.csproj'
+  IISWebSite: 'default web site'
 
 stages:
-  - stage: first
+  - stage: publish
     jobs:
     - job: test
       steps:
@@ -45,6 +46,47 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'TFSViewerArtifacts'
             publishLocation: 'Container'
+          
+  - stage: release
+    jobs:
+    - deployment: DeployWebsite
+      displayName: 'Deploy website'
+      environment: 'TFSViewer.VM-ALEXEYD-10'
+      strategy:
+       runOnce:
+           deploy:
+            steps:
+
+                - download: 'buildPipeline'
+                  name: 'DownloadBuildArtifacts'
+                  displayName: 'Download Build Artifacts'
+                  artifact: 'TFSViewerArtifacts'
+
+            
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StopIIS'
+                  displayName: 'Stop IIS website'
+                  inputs:
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'StopWebsite'
+                    StartStopWebsiteName:  $(IISWebSite)
+                    
+                - task: IISWebAppDeploymentOnMachineGroup@0
+                  name: 'DeployIIS'
+                  displayName: 'Deploy to IIS'
+                  inputs:
+                      WebSiteName:  $(IISWebSite)
+                      Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\repo'
+                      VirtualApplication : 'tfsutils'
+                      TakeAppOfflineFlag: true
+                  
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StartIIS'
+                  displayName: 'Start IIS website'
+                  inputs:
+                      IISDeploymentType: 'IISWebsite'
+                      ActionIISWebsite: 'StartWebsite'
+                      StartStopWebsiteName:  $(IISWebSite)
 
 
 
