@@ -24,7 +24,7 @@ stages:
         - task: DotNetCoreInstaller@1
           inputs:
             packageType: 'sdk'
-            version: 7.0.x'
+            version: 7.x.x'
 
         - task: DotNetCoreCLI@2
           name: 'Publish'
