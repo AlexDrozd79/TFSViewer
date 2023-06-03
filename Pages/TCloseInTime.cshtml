@@ -41,9 +41,9 @@
 
         function DrawTable(info, tag) {
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>ID</td><td>Title</td><td>Assignd to</td><td>Orininal</td><td>Completed</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>Assignd to</td><td>Orininal</td><td>Completed</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(value.fields['Microsoft.VSTS.Scheduling.OriginalEstimate'], value.fields['Microsoft.VSTS.Scheduling.CompletedWork']) + '"><td>' + value.id + '</td>' + 
+                $("#" + tag).append('<tr class="' + GetClassName(value.fields['Microsoft.VSTS.Scheduling.OriginalEstimate'], value.fields['Microsoft.VSTS.Scheduling.CompletedWork']) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>' + 
                 '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td>' + 
                 '<td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Scheduling.OriginalEstimate') + '</td><td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Scheduling.CompletedWork') + '</td></tr>');
             });
@@ -57,6 +57,12 @@
                 }
                 else {
                     className = "intime";
+
+                    var persentage = completed/original;
+                    if (persentage <= 0.8)
+                    {
+                        className += " earlier";
+                    }
                 }
             }
 
