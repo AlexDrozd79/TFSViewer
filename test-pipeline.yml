@@ -82,7 +82,7 @@ stages:
                   displayName: 'Deploy to IIS'
                   inputs:
                       WebSiteName:  $(IISWebSite)
-                      Package: '$(Pipeline.Workspace)\buildPipeline\TFSViewerArtifacts\repo'
+                      Package: '$(Pipeline.Workspace)\TFSViewerArtifacts\repo'
                       VirtualApplication : 'tfsutils'
                       TakeAppOfflineFlag: true
                   
