@@ -72,11 +72,6 @@ stages:
                     ActionIISWebsite: 'StopWebsite'
                     StartStopWebsiteName:  $(IISWebSite)
                     
-                - script: echo 'Pipeline workspace = $(Pipeline.Workspace)'
-                - script: echo 'Build.StagingDirectory  = $(Build.StagingDirectory)'
-                - script: echo 'Agent.BuildDirectory = $(Agent.BuildDirectory)'
-                - script: echo 'Agent.WorkFolder = $(Agent.WorkFolder)'
-
                 - task: IISWebAppDeploymentOnMachineGroup@0
                   name: 'DeployIIS'
                   displayName: 'Deploy to IIS'
