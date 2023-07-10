@@ -7,5 +7,17 @@ https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/ucloseInRelease - display 
 
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark as red if due date passed (even without closedate) - Done
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - mark US finished earlier in 3 days - Done
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/tCloseInTime - mark task finished earlier in 20% (by default)
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/tCloseInTime - mark task finished earlier in 20% (by default) - Done
+
+
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - BUG. I ingnore follow-up in case few tags. Add leftover tag.
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add business value checkbox for US. But check with products how they use it.
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add business value checkbox  for US
+
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - Replace release to efford release.
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime  - Replace release to efford release.
+
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add persentage
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add persentage
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/TCloseInTime - add persentage 
 
