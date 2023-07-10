@@ -10,21 +10,87 @@ trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
   
+variables:
+  project: '**/TFSViewer.csproj'
+  IISWebSite: 'default web site'
 
 stages:
-  - stage: first
+  - stage: build
     jobs:
     - job: test
       steps:
-        - script: echo Hello, world! 
-          displayName: 'Run a one-line script'
+        - checkout: self
+          path: 'repo'
+          
+        - task: DotNetCoreInstaller@1
+          inputs:
+            packageType: 'sdk'
+            version: '7.x'
 
-        - script: |
-            echo Add other tasks to build, test, and deploy your project.
-            echo See https://aka.ms/yaml
-          displayName: 'Run a multi-line script'
+        - task: DotNetCoreCLI@2
+          name: 'Publish'
+          displayName: 'Publish'
+          inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: '$(project)'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+              zipAfterPublish: false
+             
+
+            
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'TFSViewerArtifacts'
+            publishLocation: 'Container'
+          
+  - stage: release
+    jobs:
+    - deployment: DeployWebsite
+      displayName: 'Deploy website'
+      environment: 'TFSViewer.VM-ALEXEYD-10'
+      strategy:
+       runOnce:
+           deploy:
+            steps:
+
+                - download: current
+                  name: 'DownloadBuildArtifacts'
+                  displayName: 'Download Build Artifacts'
+                  artifact: 'TFSViewerArtifacts'
+      
+
+            
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StopIIS'
+                  displayName: 'Stop IIS website'
+                  inputs:
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'StopWebsite'
+                    StartStopWebsiteName:  $(IISWebSite)
+                    
+                - task: IISWebAppDeploymentOnMachineGroup@0
+                  name: 'DeployIIS'
+                  displayName: 'Deploy to IIS'
+                  inputs:
+                      WebSiteName:  $(IISWebSite)
+                      Package: '$(Pipeline.Workspace)\TFSViewerArtifacts\repo'
+                      VirtualApplication : 'tfsutils'
+                      TakeAppOfflineFlag: true
+                  
+                - task: IISWebAppManagementOnMachineGroup@0
+                  name: 'StartIIS'
+                  displayName: 'Start IIS website'
+                  inputs:
+                      IISDeploymentType: 'IISWebsite'
+                      ActionIISWebsite: 'StartWebsite'
+                      StartStopWebsiteName:  $(IISWebSite)
+
+
+
 
 
 
