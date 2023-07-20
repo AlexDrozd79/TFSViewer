@@ -29,6 +29,7 @@
         </select>
 
         <button id="go">GO</button>
+        <input type="checkbox" checked id="isBusiness" /><label>show only business US</label>
     </div>
 
 
@@ -38,18 +39,42 @@
 
     <script>
         var currentRelease = '@Model.CurrentRelease';
+        var globalInfo = null;
 
         function DrawTable(info, tag) {
 
+            var isBusiness = $("#isBusiness").is(':checked');
 
+            info = ApplyFilters(info, isBusiness);
 
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ClosedDate</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ClosedDate</td><td>Business</td></tr>');
             $(info).each(function (index, value) {
                 $("#" + tag).append('<tr class="' + GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
-                    + '</td><td>' + GetDateFieldValue(value.fields['NeoGames.DueDate']) + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td></tr>');
+                    + '</td><td>' + GetDateFieldValue(value.fields['NeoGames.DueDate']) 
+                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td><td>' 
+                    + GetFieldValue(value.fields, 'Microsoft.VSTS.Common.BusinessValue') + '</td></tr>');
             });
 
+        }
+
+
+         function ApplyFilters(info, isBusinessOnly) {
+            var result = [];
+            if (isBusinessOnly) {
+                $(info).each(function (index, value) {
+                    if (value.fields['Microsoft.VSTS.Common.BusinessValue'] == null || value.fields['Microsoft.VSTS.Common.BusinessValue'] == 1) {
+                        result.push(value);
+                    }
+                }
+                );
+            }
+            else
+            {
+                result = info;
+            }
+
+            return result;
         }
 
         function GetClassName(DueDate, CloseDate) {
@@ -109,18 +134,34 @@
             return result;
         }
 
+        function GetFieldValue(fields, fieldName) {
+            var result = "";
+
+            var isExists = fields.hasOwnProperty(fieldName);
+
+            if (isExists) {
+                result = fields[fieldName];
+            }
+            return result;
+        }
+
         $(document).ready(function () {
 
+            $("#isBusiness").change(function () {
+                DrawTable(globalInfo, "ALL");
+            });
 
 
             $("#go").click(function () {
                 $.ajax("api/UserStories/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                     DrawTable(info, "ALL");
+                    globalInfo = info;
                 });
             });
 
             $.ajax("api/UserStories/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                 DrawTable(info, "ALL");
+                globalInfo = info;
             });
 
 

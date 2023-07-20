@@ -32,6 +32,7 @@
 
         <span id="endRelease"></span>
         <input type="checkbox" checked id="checkAddDay" /><label>add additioan day to due date</label>
+        <input type="checkbox" checked id="isBusiness" /><label>show only business US</label>
     </div>
 
 
@@ -49,18 +50,38 @@
             var releaseIndex = $("#releases")[0].selectedIndex;
             var endDate = releasesData[releaseIndex].endDate.split('T')[0];
             var isAddDay = $("#checkAddDay").is(':checked');
+            var isBusiness = $("#isBusiness").is(':checked');
 
+            info = ApplyFilters(info, isBusiness);
 
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td><td>Business</td></tr>');
             $(info).each(function (index, value) {
                 var tagValue = GetFieldValue(value.fields, 'System.Tags');
                 $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'], isAddDay, tagValue) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>'
                     + '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate'])
-                    + '</td><td>' + tagValue + '</td></tr>');
+                    + '</td><td>' + tagValue + '</td><td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Common.BusinessValue') + '</td></tr>');
             });
 
+        }
+
+        function ApplyFilters(info, isBusinessOnly) {
+            var result = [];
+            if (isBusinessOnly) {
+                $(info).each(function (index, value) {
+                    if (value.fields['Microsoft.VSTS.Common.BusinessValue'] == null || value.fields['Microsoft.VSTS.Common.BusinessValue'] == 1) {
+                        result.push(value);
+                    }
+                }
+                );
+            }
+            else
+            {
+                result = info;
+            }
+
+            return result;
         }
 
         function GetClassName(DueDate, CloseDate, isAddDay, tagValue) {
@@ -126,6 +147,10 @@
 
 
             $("#checkAddDay").change(function () {
+                DrawTable(globalInfo, "ALL");
+            });
+
+            $("#isBusiness").change(function () {
                 DrawTable(globalInfo, "ALL");
             });
 
