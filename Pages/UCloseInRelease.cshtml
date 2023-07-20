@@ -89,7 +89,7 @@
 
         function isFollowUp(tagValue) {
             tagValue = tagValue.toLowerCase().trim().replaceAll(" ", "").replaceAll("-", "");
-            return tagValue == "followup"
+            return tagValue.includes("followup");
         }
 
         function GetDateFieldValue(field) {

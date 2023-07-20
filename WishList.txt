@@ -23,3 +23,7 @@ https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/TCloseInTime - add persent
 
 get automatic release
 
+
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add column with last close task date
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add column with last close task date
+
