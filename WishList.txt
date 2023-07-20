@@ -13,12 +13,10 @@ https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/tCloseInTime - mark task f
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - BUG. I ingnore follow-up in case few tags. Add leftover tag.  - DONE
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add business value checkbox for US. But check with products how they use it. - DONE
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add business value checkbox  for US - DONE
+  
 
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - Replace release to efford release.
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime  - Replace release to efford release.    
-
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add persentage
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add persentage
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add persentage - DONE
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add persentage - DONE
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/TCloseInTime - add persentage 
 
 get automatic release

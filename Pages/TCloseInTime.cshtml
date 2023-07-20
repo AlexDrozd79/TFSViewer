@@ -30,6 +30,11 @@
 
         <button id="go">GO</button>
     </div>
+    <div id="summary">
+        <label>Delays count: </label><span id="usDelaysCount"></span>
+        <label>All US count: </label><span id="usCount"></span>
+        <label>Delays percentage: </label><span id="usDelaysPersentage"></span>
+    </div>
 
 
     <table id="ALL" class="data-table"> </table>
@@ -37,30 +42,39 @@
 
 
     <script>
-
+        const DELAYED = "delayed";
 
         function DrawTable(info, tag) {
+            var delaysCount = 0;
+            
             $("#" + tag).empty();
             $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>Assignd to</td><td>Orininal</td><td>Completed</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(value.fields['Microsoft.VSTS.Scheduling.OriginalEstimate'], value.fields['Microsoft.VSTS.Scheduling.CompletedWork']) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>' + 
-                '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td>' + 
-                '<td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Scheduling.OriginalEstimate') + '</td><td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Scheduling.CompletedWork') + '</td></tr>');
+                var className = GetClassName(value.fields['Microsoft.VSTS.Scheduling.OriginalEstimate'], value.fields['Microsoft.VSTS.Scheduling.CompletedWork']);
+
+                delaysCount += (className == DELAYED ? 1 : 0);
+
+                $("#" + tag).append('<tr class="' + className + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>' +
+                    '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td>' +
+                    '<td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Scheduling.OriginalEstimate') + '</td><td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Scheduling.CompletedWork') + '</td></tr>');
             });
+
+            $("#usDelaysCount").text(delaysCount);
+            $("#usCount").text(info.length);
+            $("#usDelaysPersentage").text(Math.round(delaysCount / info.length * 100) + "%");
         }
 
         function GetClassName(original, completed) {
             var className = "undefined";
             if (original != null && completed != null) {
                 if (completed > original) {
-                    className = "delayed";
+                    className = DELAYED;
                 }
                 else {
                     className = "intime";
 
-                    var persentage = completed/original;
-                    if (persentage <= 0.8)
-                    {
+                    var persentage = completed / original;
+                    if (persentage <= 0.8) {
                         className += " earlier";
                     }
                 }
@@ -69,7 +83,7 @@
             return className;
         }
 
-         function GetDisplayName(field) {
+        function GetDisplayName(field) {
             var result = "";
             if (field != null) {
                 result = field.displayName;
@@ -79,9 +93,9 @@
 
         function GetFieldValue(fields, fieldName) {
             var result = "";
-            
+
             var isExists = fields.hasOwnProperty(fieldName);
-            
+
             if (isExists) {
                 result = fields[fieldName];
             }

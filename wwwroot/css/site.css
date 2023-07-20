@@ -185,3 +185,13 @@ html {
 .intime>.status {
   background-image: url(img/check.png);
 }
+
+#summary
+{
+  margin:5px 0px;
+}
+
+#summary span
+{
+  margin-right: 10px;
+}

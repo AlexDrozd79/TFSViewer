@@ -31,6 +31,11 @@
         <button id="go">GO</button>
         <input type="checkbox" checked id="isBusiness" /><label>show only business US</label>
     </div>
+    <div id="summary">
+        <label>Delays count: </label><span id="usDelaysCount"></span>
+        <label>All US count: </label><span id="usCount"></span>
+        <label>Delays percentage: </label><span id="usDelaysPersentage"></span>
+    </div>
 
 
     <table id="ALL" class="data-table"> </table>
@@ -38,28 +43,38 @@
 
 
     <script>
+        const DELAYED = "delayed";
         var currentRelease = '@Model.CurrentRelease';
         var globalInfo = null;
 
         function DrawTable(info, tag) {
 
             var isBusiness = $("#isBusiness").is(':checked');
+            var delaysCount = 0;
 
             info = ApplyFilters(info, isBusiness);
 
             $("#" + tag).empty();
             $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ClosedDate</td><td>Business</td></tr>');
             $(info).each(function (index, value) {
-                $("#" + tag).append('<tr class="' + GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ClosedDate']) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
-                    + '</td><td>' + GetDateFieldValue(value.fields['NeoGames.DueDate']) 
-                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td><td>' 
+                var className = GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ClosedDate']);
+
+                delaysCount += (className == DELAYED ? 1 : 0);
+
+                $("#" + tag).append('<tr class="' + className + '"><td class="status">&nbsp;</td><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
+                    + '</td><td>' + GetDateFieldValue(value.fields['NeoGames.DueDate'])
+                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td><td>'
                     + GetFieldValue(value.fields, 'Microsoft.VSTS.Common.BusinessValue') + '</td></tr>');
             });
+
+            $("#usDelaysCount").text(delaysCount);
+            $("#usCount").text(info.length);
+            $("#usDelaysPersentage").text(Math.round(delaysCount / info.length * 100) + "%");
 
         }
 
 
-         function ApplyFilters(info, isBusinessOnly) {
+        function ApplyFilters(info, isBusinessOnly) {
             var result = [];
             if (isBusinessOnly) {
                 $(info).each(function (index, value) {
@@ -69,8 +84,7 @@
                 }
                 );
             }
-            else
-            {
+            else {
                 result = info;
             }
 
@@ -87,27 +101,26 @@
                 d2 = new Date(d2.toDateString())
 
                 if (d2 > d1) {
-                    className = "delayed";
+                    className = DELAYED;
                 }
                 else {
                     className = "intime";
                     var diffInDays = d1.getDate() - d2.getDate();
-                    if (diffInDays > 3)
-                    {
+                    if (diffInDays > 3) {
                         className += " earlier";
                     }
                 }
             }
             else {
                 if (DueDate == null && $("#releases").val() != currentRelease) {
-                    className = "delayed";
+                    className = DELAYED;
                 }
 
                 if (CloseDate == null && DueDate != null) {
                     var d1 = new Date(DueDate);
                     d1 = new Date(d1.toDateString())
                     if (d1 < new Date()) {
-                        className = "delayed";
+                        className = DELAYED;
                     }
 
                 }

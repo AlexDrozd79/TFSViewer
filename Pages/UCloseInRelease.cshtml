@@ -34,6 +34,11 @@
         <input type="checkbox" checked id="checkAddDay" /><label>add additioan day to due date</label>
         <input type="checkbox" checked id="isBusiness" /><label>show only business US</label>
     </div>
+    <div id = "summary">
+        <label>Delays count: </label><span id = "usDelaysCount"></span>
+        <label>All US count: </label><span id = "usCount"></span>
+        <label>Delays percentage: </label><span id = "usDelaysPersentage"></span>
+    </div>
 
 
     <table id="ALL" class="data-table"> </table>
@@ -43,6 +48,7 @@
     <script>
         var releasesData = @Json.Serialize(Model.Releases.ToArray());
         var globalInfo = null;
+        const DELAYED = "delayed";
 
 
         function DrawTable(info, tag) {
@@ -51,6 +57,7 @@
             var endDate = releasesData[releaseIndex].endDate.split('T')[0];
             var isAddDay = $("#checkAddDay").is(':checked');
             var isBusiness = $("#isBusiness").is(':checked');
+            var delaysCount = 0;
 
             info = ApplyFilters(info, isBusiness);
 
@@ -58,11 +65,19 @@
             $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>ClosedDate</td><td>Tags</td><td>Business</td></tr>');
             $(info).each(function (index, value) {
                 var tagValue = GetFieldValue(value.fields, 'System.Tags');
-                $("#" + tag).append('<tr class="' + GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'], isAddDay, tagValue) + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>'
+                var className = GetClassName(endDate, value.fields['Microsoft.VSTS.Common.ClosedDate'], isAddDay, tagValue);
+
+                delaysCount += (className == DELAYED ? 1 : 0);
+
+                $("#" + tag).append('<tr class="' + className + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>'
                     + '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate'])
                     + '</td><td>' + tagValue + '</td><td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Common.BusinessValue') + '</td></tr>');
             });
+
+            $("#usDelaysCount").text(delaysCount);
+            $("#usCount").text(info.length);
+            $("#usDelaysPersentage").text(Math.round(delaysCount / info.length  * 100) + "%");
 
         }
 
@@ -98,7 +113,7 @@
                 }
 
                 if (d2 > d1 || isFollowUp(tagValue)) {
-                    className = "delayed";
+                    className = DELAYED;
                 }
                 else {
                     className = "intime";
