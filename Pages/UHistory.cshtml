@@ -65,7 +65,7 @@
 
             $("#" + tag).empty();
             $(common).each(function (index, value) {
-                $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+                $("#" + tag).append('<tr><td>' + GetIDLink(value.id) + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
             });
             $(removed).each(function (index, value) {
                 $("#" + tag).append('<tr class="removed"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
@@ -90,6 +90,11 @@
                 result = field.displayName;
             }
             return result;
+        }
+
+        function GetIDLink(ID)
+        {
+            return  "<a target='_blank' href='@Model.ItemURL" + ID + "'>" + ID + "</a>";
         }
 
         $(document).ready(function () {

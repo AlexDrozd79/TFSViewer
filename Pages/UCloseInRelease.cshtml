@@ -69,7 +69,7 @@
 
                 delaysCount += (className == DELAYED ? 1 : 0);
 
-                $("#" + tag).append('<tr class="' + className + '"><td class="status">&nbsp;</td><td>' + value.id + '</td>'
+                $("#" + tag).append('<tr class="' + className + '"><td class="status">&nbsp;</td><td>' + GetIDLink(value.id) + '</td>'
                     + '<td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate'])
                     + '</td><td>' + tagValue + '</td><td>' + GetFieldValue(value.fields, 'Microsoft.VSTS.Common.BusinessValue') + '</td></tr>');
@@ -156,6 +156,11 @@
                 result = fields[fieldName];
             }
             return result;
+        }
+
+        function GetIDLink(ID)
+        {
+            return  "<a target='_blank' href='@Model.ItemURL" + ID + "'>" + ID + "</a>";
         }
 
         $(document).ready(function () {

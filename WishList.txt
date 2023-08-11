@@ -17,7 +17,10 @@ https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add busines
 
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - add persentage - DONE
 https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInTime - add persentage - DONE
-https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/TCloseInTime - add persentage 
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/TCloseInTime - add persentage  - DONE
+
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/UCloseInRelease - mark as RED in case no close date and releases ended.
+https://vm-alexeyd-10.corp.neogames-tech.com/tfsutils/TCloseInTime - filter by person
 
 get automatic release
 

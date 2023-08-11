@@ -21,7 +21,7 @@ public class UHistoryModel : PageModel
 
     public string CurrentRelease { get; set; } = "";
 
-
+    public string ItemURL {get; set;}
 
     public void OnGet()
     {
@@ -31,6 +31,7 @@ public class UHistoryModel : PageModel
 
         Teams = BusinessLogic.Teams.QueryTeams().ToList();
         Releases = BusinessLogic.Releases.GetReleases(4, 0);
+        ItemURL = Utils.Config.ItemURL;
     }
 
     private DateTime ParseDate(string date)

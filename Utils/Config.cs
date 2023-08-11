@@ -12,6 +12,7 @@ public static class Config
         Password = config.GetValue<string>("password") ?? "";
         URI = config.GetValue<string>("uri") ?? "";
         Token = config.GetValue<string>("token") ?? "";
+        ItemURL = config.GetValue<string>("itemurl") ?? "";
     }
     public static string Project { get; set; } = "";
 
@@ -22,6 +23,8 @@ public static class Config
     public static string URI { get; set; } = "";
 
     public static string Token { get; set; } = "";
+
+    public static string ItemURL {get; set;} = "";
 
 
 
