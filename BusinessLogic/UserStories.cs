@@ -22,7 +22,7 @@ public static class UserStories
                     "AND [System.WorkItemType] = 'User Story' AND  [System.State] <> 'Removed' and [NG.Release] = '" + release + "' and [System.AreaPath] under '" + areaPath + "'" +
                     "Order By [ID] Asc  ASOF '" + date.ToString("MM-dd-yyyy") + "'";
 
-        return QueryExecutor.ExecuteQuery(query);
+        return QueryExecutor.ExecuteQuery(query, date);
 
     }
 

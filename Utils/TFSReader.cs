@@ -26,7 +26,7 @@ public class QueryExecutor
     /// </param>
 
 
-    public static IList<WorkItem> ExecuteQuery(string WIQL)
+    public static IList<WorkItem> ExecuteQuery(string WIQL, DateTime? asOff = null)
     {
         VssCredentials credentials = CreateCredentials();
 
@@ -56,14 +56,14 @@ public class QueryExecutor
             {
                 if (ids.Length <= 200)
                 {
-                    items = httpClient.GetWorkItemsAsync(ids, null, null).Result;
+                    items = httpClient.GetWorkItemsAsync(ids, null, asOff).Result;
                 }
                 else
                 {
                     List<WorkItem> lst = new List<WorkItem>();
                     while (ids.Length > 0)
                     {
-                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, null).Result);
+                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, asOff).Result);
                         ids = ids.Skip(200).ToArray();
                     }
                     items = lst;
@@ -72,7 +72,7 @@ public class QueryExecutor
             }
             catch (System.AggregateException ex)
             {
-                items = HandleAggregateException(ids, httpClient, ex);
+                items = HandleAggregateException(ids, httpClient, asOff, ex);
             }
 
             return items;
@@ -81,7 +81,7 @@ public class QueryExecutor
 
     }
 
-    private static IList<WorkItem> HandleAggregateException(int[] ids, WorkItemTrackingHttpClient httpClient, AggregateException ex)
+    private static IList<WorkItem> HandleAggregateException(int[] ids, WorkItemTrackingHttpClient httpClient, DateTime? asOff, AggregateException ex)
     {
         IList<WorkItem> items = new List<WorkItem>();
         bool hasResult = false;
@@ -93,7 +93,7 @@ public class QueryExecutor
 
             try
             {
-                items = httpClient.GetWorkItemsAsync(ids, null, null).Result;
+                items = httpClient.GetWorkItemsAsync(ids, null, asOff).Result;
                 hasResult = true;
             }
             catch (System.AggregateException ex2)
