@@ -20,7 +20,7 @@ public static class UserStories
                     "From WorkItems " +
                     "Where [System.TeamProject] = '" + Config.Project + "' " +
                     "AND [System.WorkItemType] = 'User Story' AND  [System.State] <> 'Removed' and [NG.Release] = '" + release + "' and [System.AreaPath] under '" + areaPath + "'" +
-                    "Order By [ID] Asc  ASOF '" + date.ToString("MM-dd-yyyy") + "'";
+                    "Order By [ID] Asc  ASOF '" + date.ToString("MM-dd-yyyy") + " 23:59:59'";
 
         return QueryExecutor.ExecuteQuery(query, date);
 

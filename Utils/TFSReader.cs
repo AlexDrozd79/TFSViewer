@@ -56,14 +56,14 @@ public class QueryExecutor
             {
                 if (ids.Length <= 200)
                 {
-                    items = httpClient.GetWorkItemsAsync(ids, null, asOff).Result;
+                    items = httpClient.GetWorkItemsAsync(ids, null, asOff, WorkItemExpand.Relations).Result;
                 }
                 else
                 {
                     List<WorkItem> lst = new List<WorkItem>();
                     while (ids.Length > 0)
                     {
-                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, asOff).Result);
+                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, asOff, WorkItemExpand.Relations).Result);
                         ids = ids.Skip(200).ToArray();
                     }
                     items = lst;
@@ -93,7 +93,7 @@ public class QueryExecutor
 
             try
             {
-                items = httpClient.GetWorkItemsAsync(ids, null, asOff).Result;
+                items = httpClient.GetWorkItemsAsync(ids, null, asOff, WorkItemExpand.Relations).Result;
                 hasResult = true;
             }
             catch (System.AggregateException ex2)
@@ -128,12 +128,6 @@ public class QueryExecutor
 
         string personalToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Config.Token));
         return new VssBasicCredential(string.Empty, personalToken);
-
-
-        // NetworkCredential networkCredential = new NetworkCredential(Config.User, Config.Password);
-        // Microsoft.VisualStudio.Services.Common.WindowsCredential winCred = new Microsoft.VisualStudio.Services.Common.WindowsCredential(networkCredential);
-        // VssCredentials credentials = new VssCredentials(winCred);
-        // return credentials;
     }
 
 
