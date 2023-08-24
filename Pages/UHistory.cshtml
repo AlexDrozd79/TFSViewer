@@ -68,10 +68,10 @@
                 $("#" + tag).append('<tr><td>' + GetIDLink(value.id) + '</td><td>' + value.fields['System.Title'] + '</td><td>' + value.fields['System.State'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
             });
             $(removed).each(function (index, value) {
-                $("#" + tag).append('<tr class="removed"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td>><td>' + value.fields['System.State'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+                $("#" + tag).append('<tr class="removed"><td>' + GetIDLink(value.id) + '</td><td>' + value.fields['System.Title'] + '</td>><td>' + value.fields['System.State'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
             });
             $(added).each(function (index, value) {
-                $("#" + tag).append('<tr class="added"><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td>><td>' + value.fields['System.State'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+                $("#" + tag).append('<tr class="added"><td>' + GetIDLink(value.id) + '</td><td>' + value.fields['System.Title'] + '</td>><td>' + value.fields['System.State'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
             });
         }
 
@@ -119,9 +119,9 @@
 
 
             $("#go").click(function () {
-                $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                $.ajax("api/UserStories/?fullReverse=true&release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                     var info1 = info;
-                    $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker2").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                    $.ajax("api/UserStories/?fullReverse=true&release=" + $("#releases").val() + "&date=" + $("#datepicker2").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                         var info2 = info;
                         DrawTable(info1, info2, "ALL");
                     })
@@ -129,9 +129,9 @@
             });
 
             $.ajax("api/UserStories/").done(function (info) {
-                $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                $.ajax("api/UserStories/?fullReverse=true&release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                     var info1 = info;
-                    $.ajax("api/UserStories/?release=" + $("#releases").val() + "&date=" + $("#datepicker2").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
+                    $.ajax("api/UserStories/?fullReverse=true&release=" + $("#releases").val() + "&date=" + $("#datepicker2").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                         var info2 = info;
                         DrawTable(info1, info2, "ALL");
                     })

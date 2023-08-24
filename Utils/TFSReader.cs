@@ -56,14 +56,14 @@ public class QueryExecutor
             {
                 if (ids.Length <= 200)
                 {
-                    items = httpClient.GetWorkItemsAsync(ids, null, asOff, WorkItemExpand.Relations).Result;
+                    items = httpClient.GetWorkItemsAsync(ids, null, asOff).Result;
                 }
                 else
                 {
                     List<WorkItem> lst = new List<WorkItem>();
                     while (ids.Length > 0)
                     {
-                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, asOff, WorkItemExpand.Relations).Result);
+                        lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), null, asOff).Result);
                         ids = ids.Skip(200).ToArray();
                     }
                     items = lst;
@@ -93,7 +93,7 @@ public class QueryExecutor
 
             try
             {
-                items = httpClient.GetWorkItemsAsync(ids, null, asOff, WorkItemExpand.Relations).Result;
+                items = httpClient.GetWorkItemsAsync(ids, null, asOff).Result;
                 hasResult = true;
             }
             catch (System.AggregateException ex2)

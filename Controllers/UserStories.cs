@@ -14,7 +14,7 @@ namespace TFSViewer.Controllers
     [ApiController]
     public class UserStoriesController : ControllerBase
     {
-        public List<WorkItem> GetUserStories(string release = "", string date = "", string areapath = "")
+        public List<WorkItem> GetUserStories(string release = "", string date = "", string areapath = "", string fullReverse = "")
         {
             string currentRelease = release;
             if (string.IsNullOrWhiteSpace(currentRelease))
@@ -22,10 +22,11 @@ namespace TFSViewer.Controllers
                 currentRelease = Releases.GetCurrentRelease();
             }
 
-            DateTime currentDate = DateTime.Today;
+            DateTime currentDate = DateTime.Now;
             if (!string.IsNullOrWhiteSpace(date))
             {
                 currentDate = DateTime.ParseExact(date, "yyyy-MM-dd", null);
+                currentDate = currentDate.AddDays(1).AddSeconds(-1);
             }
 
             string currentAreaPath = "NeoAppAgile\\Lotteries";
@@ -34,7 +35,14 @@ namespace TFSViewer.Controllers
                 currentAreaPath = areapath;
             }
 
-            var workItems = UserStories.QueryUserStories(currentRelease, currentDate, currentAreaPath);
+            bool currentFullReverse = false;
+            if (!string.IsNullOrEmpty(fullReverse))
+            {
+                currentFullReverse = bool.Parse(fullReverse);
+            }
+
+            var workItems = UserStories.QueryUserStories(currentRelease, currentDate, currentAreaPath, currentFullReverse);
+
             return workItems.ToList();
 
         }

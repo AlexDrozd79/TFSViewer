@@ -119,6 +119,18 @@
                     className = "intime";
                 }
             }
+            else if (CloseDate == null)
+            {
+                var d1 = new Date(DueDate);
+                d1 = new Date(d1.toDateString());
+                var d2 = new Date();
+                d2 = new Date(d2.toDateString());
+                
+                if (d2 > d1)
+                {
+                    className = DELAYED;
+                }
+            }
 
             return className;
         }
