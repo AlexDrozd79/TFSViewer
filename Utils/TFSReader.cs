@@ -81,6 +81,56 @@ public class QueryExecutor
 
     }
 
+
+
+    public static IList<WorkItem> ExecuteQueryForLinkItems(string WIQL, List<string> fields)
+    {
+        VssCredentials credentials = CreateCredentials();
+
+        var wiql = new Wiql()
+        {
+            // NOTE: Even if other columns are specified, only the ID & URL are available in the WorkItemReference
+            Query = WIQL,
+        };
+
+
+        // create instance of work item tracking http client
+        using (var httpClient = new WorkItemTrackingHttpClient(new Uri(Config.URI ?? ""), credentials))
+        {
+            // execute the query to get the list of work items in the results
+            var result = httpClient.QueryByWiqlAsync(wiql);
+
+            var ids = result.Result.WorkItemRelations.Select(item => item.Target.Id).ToArray();
+            
+
+            // some error handling
+            IList<WorkItem> items = Array.Empty<WorkItem>();
+            if (ids.Length == 0)
+            {
+                return items;
+            }
+
+            if (ids.Length <= 200)
+            {
+                items = httpClient.GetWorkItemsAsync(ids, fields).Result;
+            }
+            else
+            {
+                List<WorkItem> lst = new List<WorkItem>();
+                while (ids.Length > 0)
+                {
+                    lst.AddRange(httpClient.GetWorkItemsAsync(ids.Take(200), fields).Result);
+                    ids = ids.Skip(200).ToArray();
+                }
+                items = lst;
+            }
+
+            return items;
+        }
+
+
+    }
+
     private static IList<WorkItem> HandleAggregateException(int[] ids, WorkItemTrackingHttpClient httpClient, DateTime? asOff, AggregateException ex)
     {
         IList<WorkItem> items = new List<WorkItem>();

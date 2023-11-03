@@ -14,7 +14,7 @@ namespace TFSViewer.Controllers
     [ApiController]
     public class UserStoriesController : ControllerBase
     {
-        public List<WorkItem> GetUserStories(string release = "", string date = "", string areapath = "", string fullReverse = "")
+        public List<WorkItem> GetUserStories(string release = "", string date = "", string areapath = "", string fullReverse = "", string additionalData = "")
         {
             string currentRelease = release;
             if (string.IsNullOrWhiteSpace(currentRelease))
@@ -43,6 +43,12 @@ namespace TFSViewer.Controllers
 
             var workItems = UserStories.QueryUserStories(currentRelease, currentDate, currentAreaPath, currentFullReverse);
 
+
+            if (!string.IsNullOrEmpty(additionalData) && additionalData.ToLower() == "lastcompletedtask")
+            {
+                IList<WorkItem> childs = UserStories.QueryUserStoriesChildItems(currentRelease, currentDate, currentAreaPath);
+
+            }
             return workItems.ToList();
 
         }

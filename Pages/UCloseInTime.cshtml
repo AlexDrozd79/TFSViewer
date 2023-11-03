@@ -55,15 +55,15 @@
             info = ApplyFilters(info, isBusiness);
 
             $("#" + tag).empty();
-            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ClosedDate</td><td>Business</td></tr>');
+            $("#" + tag).append('<tr class="table_header"><td>&nbsp;</td><td>ID</td><td>Title</td><td>AssignedTo</td><td>DueDate</td><td>ResolvedDate</td><td>Business</td></tr>');
             $(info).each(function (index, value) {
-                var className = GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ClosedDate']);
+                var className = GetClassName(value.fields['NeoGames.DueDate'], value.fields['Microsoft.VSTS.Common.ResolvedDate']);
 
                 delaysCount += (className == DELAYED ? 1 : 0);
 
                 $("#" + tag).append('<tr class="' + className + '"><td class="status">&nbsp;</td><td>' + GetIDLink(value.id) + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo'])
                     + '</td><td>' + GetDateFieldValue(value.fields['NeoGames.DueDate'])
-                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ClosedDate']) + '</td><td>'
+                    + '</td><td>' + GetDateFieldValue(value.fields['Microsoft.VSTS.Common.ResolvedDate']) + '</td><td>'
                     + GetFieldValue(value.fields, 'Microsoft.VSTS.Common.BusinessValue') + '</td></tr>');
             });
 
@@ -91,13 +91,13 @@
             return result;
         }
 
-        function GetClassName(DueDate, CloseDate) {
+        function GetClassName(DueDate, ResolvedDate) {
             var className = "undefined";
-            if (DueDate != null && CloseDate != null) {
+            if (DueDate != null && ResolvedDate != null) {
 
                 var d1 = new Date(DueDate);
                 d1 = new Date(d1.toDateString())
-                var d2 = new Date(CloseDate);
+                var d2 = new Date(ResolvedDate);
                 d2 = new Date(d2.toDateString())
 
                 if (d2 > d1) {
@@ -116,7 +116,7 @@
                     className = DELAYED;
                 }
 
-                if (CloseDate == null && DueDate != null) {
+                if (ResolvedDate == null && DueDate != null) {
                     var d1 = new Date(DueDate);
                     d1 = new Date(d1.toDateString())
                     if (d1 < new Date()) {

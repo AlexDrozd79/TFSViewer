@@ -27,7 +27,7 @@ public static class UserStories
     }
 
 
-    public static IList<WorkItem> QueryUserStoriesEx(string release, DateTime date, string areaPath)
+    public static IList<WorkItem> QueryUserStoriesChildItems(string release, DateTime date, string areaPath)
     {
         string query = " SELECT [Id] " +
              "FROM WorkItemLinks " +
@@ -36,20 +36,10 @@ public static class UserStories
              "AND [Source].[NG.Release] = '" + release + "' and [Source].[System.AreaPath] under '" + areaPath + "' " +
              "ORDER BY [System.Id] mode(MustContain)";
 
-        IList<WorkItem> items = QueryExecutor.ExecuteQuery(query, date);
+        IList<WorkItem> items = QueryExecutor.ExecuteQueryForLinkItems(query, new List<string>() { "[System.Parent]", "[System.WorkItemType]", "[Microsoft.VSTS.Common.ClosedDate]" });
 
-        IList<WorkItem> stories = items.Where(i => i.Fields["System.WorkItemType"].ToString() == "User Story").ToList();
-
-        foreach (WorkItem story in stories)
-        {
-            IList<WorkItem> storyTasks = items.Where(i => i.Fields["System.Parent"].ToString() == story.Id.ToString()).Where(i => i.Fields["Closed Date"] != null).ToList();
-            DateTime maxDate = storyTasks.Select(t => DateTime.Parse (t.Fields["Closed Date"].ToString())).Max();
-           
-            story.Fields.Add("LastClosedTaskDate", maxDate);
-            
-        }
-
-        return stories;
+       
+        return items;
 
 
     }
