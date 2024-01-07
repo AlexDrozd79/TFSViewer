@@ -42,6 +42,7 @@ public class QueryExecutor
         {
             // execute the query to get the list of work items in the results
             var result = httpClient.QueryByWiqlAsync(wiql);
+            
 
             var ids = result.Result.WorkItems.Select(item => item.Id).ToArray();
 

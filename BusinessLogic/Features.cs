@@ -13,7 +13,7 @@ using TFSViewer.Utils;
 
 public static class Features
 {
-    public static IList<WorkItem> QueryFeatures(string release,  DateTime date, string areaPath = "")
+    public static IList<WorkItem> QueryFeatures(string release, DateTime date, string areaPath = "")
     {
 
         DateTime currentDate = date;
@@ -33,4 +33,28 @@ public static class Features
 
     }
 
+    public static IList<WorkItem> QueryFeaturesRecursive(string release, DateTime date, string areaPath = "")
+    {
+
+        DateTime currentDate = date;
+
+        if (string.IsNullOrWhiteSpace(areaPath))
+        {
+            areaPath = "NeoAppAgile\\Lotteries\\Ocean11";
+        }
+
+        string query = "Select [Id] " +
+                    "From WorkItemLinks " +
+                    "Where [Source].[System.TeamProject] = '" + Config.Project + "' " +
+                    "AND [Source].[System.WorkItemType] = 'Feature' AND [Source].[System.State] <> 'Removed' AND [Source].[System.State] <> 'Closed' " +
+                    "AND [Source].[NG.Release] = '" + release + "' AND [Source].[System.AreaPath] under '" + areaPath + "' " +
+                    "AND ([System.Links.LinkType] = 'System.LinkTypes.Hierarchy-Forward') AND ([Target].[System.TeamProject] = '" + Config.Project + "' AND [Target].[System.WorkItemType] <> '') mode(Recursive)";
+
+        return QueryExecutor.ExecuteQueryForLinkItems(query, new List<string> {"System.Id", "System.WorkItemType", "System.State", "System.AssignedTo",
+                    "System.Title", "NG.FrontendEstimation", "NG.QAEstimation", "NG.NetEstimation", "NG.QAAutomationEstimation", "NG.DBAEstimation", "Microsoft.VSTS.Scheduling.OriginalEstimate",
+                    "System.Parent"});
+
+    }
+
+   
 }

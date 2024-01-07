@@ -22,13 +22,8 @@ public class FeaturesInfo
     public List<WorkItem> WaitingForEvaluation
     {
         get
-        {
-            // return Features.Where(f => GetStringValue(f.Fields, "System.State") == "new")
-            // .Where(f => GetStringValue(f.Fields, "System.Tags").Contains("feature evaluation") && GetStringValue(f.Fields, "NG.QAEstimation") == ""
-            //     && GetStringValue(f.Fields, "NG.NetEstimation") == "" && GetStringValue(f.Fields, "NG.DBAEstimation") == ""
-            //     && GetStringValue(f.Fields, "NG.FrontendEstimation") == "" && GetStringValue(f.Fields, "NG.QAAutomationEstimation") == "").ToList();
-
-                 return Features.Where(f => GetStringValue(f.Fields, "System.State") == "new")
+        {        
+            return Features.Where(f => GetStringValue(f.Fields, "System.State") == "new")
             .Where(f => GetStringValue(f.Fields, "NG.QAEstimation") == ""
                 && GetStringValue(f.Fields, "NG.NetEstimation") == "" && GetStringValue(f.Fields, "NG.DBAEstimation") == ""
                 && GetStringValue(f.Fields, "NG.FrontendEstimation") == "" && GetStringValue(f.Fields, "NG.QAAutomationEstimation") == "").ToList();
@@ -39,12 +34,7 @@ public class FeaturesInfo
     {
         get
         {
-            // return   Features.Where(f => GetStringValue(f.Fields, "System.State" ) == "new")
-            // .Where(f => GetStringValue(f.Fields, "System.Tags").Contains("feature evaluation") && (GetStringValue(f.Fields, "NG.QAEstimation") != "" 
-            //     || GetStringValue(f.Fields, "NG.NetEstimation") != "" || GetStringValue(f.Fields, "NG.DBAEstimation") != "" 
-            //     || GetStringValue(f.Fields, "NG.FrontendEstimation")!="" || GetStringValue(f.Fields, "NG.QAAutomationEstimation")!="")).ToList();
-
-            return Features.Where(f => GetStringValue(f.Fields, "System.State") == "new")
+           return Features.Where(f => GetStringValue(f.Fields, "System.State") == "new")
             .Where(f =>  GetStringValue(f.Fields, "NG.QAEstimation") != ""
                 || GetStringValue(f.Fields, "NG.NetEstimation") != "" || GetStringValue(f.Fields, "NG.DBAEstimation") != ""
                 || GetStringValue(f.Fields, "NG.FrontendEstimation") != "" || GetStringValue(f.Fields, "NG.QAAutomationEstimation") != "")
