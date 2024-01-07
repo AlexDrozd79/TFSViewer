@@ -40,7 +40,7 @@ public static class Features
 
         if (string.IsNullOrWhiteSpace(areaPath))
         {
-            areaPath = "NeoAppAgile\\Lotteries\\Ocean11";
+            areaPath = "NeoAppAgile\\Lotteries";
         }
 
         string query = "Select [Id] " +

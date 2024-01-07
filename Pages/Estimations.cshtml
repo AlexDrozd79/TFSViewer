@@ -42,19 +42,25 @@
     <script>
         function DrawTable(items, tag) {
             $("#" + tag).empty();
+            $("#" + tag).append('<tr>' + 
+                '<td>ID</td><td>Title</td><td>NET(F)</td><td>NET(US)</td><td>NET(Task)</td>' + 
+                '<td>DB(F)</td><td>DB(US)</td><td>DB(Task)</td>' + 
+                '<td>FE(F)</td><td>FE(US)</td><td>FE(Task)</td>' + 
+                '<td>QA(F)</td><td>QA(US)</td><td>QA(Task)</td>' + 
+                '<td>QAA(F)</td><td>QAA(US)</td><td>QAA(Task)</td>' + 
+                '</tr>');
             $(items).each(function (index, value) {
-                $("#" + tag).append('<tr><td>' + value.id + '</td><td>' + value.fields['System.Title'] + '</td><td>' + GetDisplayName(value.fields['System.AssignedTo']) + '</td></tr>');
+                $("#" + tag).append('<tr><td>' + value.id + '</td>' + 
+                    '<td>' + value.title + '</td><td>' + value.netf + '</td><td>' + value.netus + '</td><td>' + value.netTask + '</td>' + 
+                    '<td>' + value.dbaf + '</td><td>' + value.dbaus + '</td><td>' + value.dbaTask + '</td>' + 
+                    '<td>' + value.fef + '</td><td>' + value.feus + '</td><td>' + value.feTask + '</td>' + 
+                    '<td>' + value.qaf + '</td><td>' + value.qaus + '</td><td>' + value.qaTask + '</td>' + 
+                    '<td>' + value.qaaf + '</td><td>' + value.qaaus + '</td><td>' + value.qaaTask + '</td>' +
+                '</tr>');
             });
         }
 
-        function GetDisplayName(field) {
-            var result = "";
-            if (field != null) {
-                result = field.displayName;
-            }
-            return result;
-        }
-
+       
         $(document).ready(function () {
 
             $("#datepicker").datepicker();
@@ -62,12 +68,12 @@
 
             $("#go").click(function () {
                 $.ajax("api/Features/GetFeaturesRecursive?release=" + $("#releases").val() + "&date=" + $("#datepicker").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
-                    DrawTable(info.all, "ALL");
+                    DrawTable(info, "ALL");
                 });
             });
 
             $.ajax("api/Features/GetFeaturesRecursive").done(function (info) {
-                DrawTable(info.all, "ALL");
+                DrawTable(info, "ALL");
             });
 
 
