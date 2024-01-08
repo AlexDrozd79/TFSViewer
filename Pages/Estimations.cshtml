@@ -1,5 +1,5 @@
 ﻿@page
-@model FHistoryModel
+@model EstimationsModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -50,7 +50,7 @@
                 '<td>QAA(F)</td><td>QAA(US)</td><td>QAA(Task)</td>' + 
                 '</tr>');
             $(items).each(function (index, value) {
-                $("#" + tag).append('<tr><td>' + value.id + '</td>' + 
+                $("#" + tag).append('<tr><td>' + GetIDLink(value.id) + '</td>' + 
                     '<td>' + value.title + '</td><td>' + value.netf + '</td><td>' + value.netus + '</td><td>' + value.netTask + '</td>' + 
                     '<td>' + value.dbaf + '</td><td>' + value.dbaus + '</td><td>' + value.dbaTask + '</td>' + 
                     '<td>' + value.fef + '</td><td>' + value.feus + '</td><td>' + value.feTask + '</td>' + 
@@ -58,6 +58,11 @@
                     '<td>' + value.qaaf + '</td><td>' + value.qaaus + '</td><td>' + value.qaaTask + '</td>' +
                 '</tr>');
             });
+        }
+
+        function GetIDLink(ID)
+        {
+            return  "<a target='_blank' href='@Model.ItemURL" + ID + "'>" + ID + "</a>";
         }
 
        

@@ -46,7 +46,7 @@ public static class Features
         string query = "Select [Id] " +
                     "From WorkItemLinks " +
                     "Where [Source].[System.TeamProject] = '" + Config.Project + "' " +
-                    "AND [Source].[System.WorkItemType] = 'Feature' AND [Source].[System.State] <> 'Removed' AND [Source].[System.State] <> 'Closed' " +
+                    "AND [Source].[System.WorkItemType] = 'Feature' AND [Source].[System.State] <> 'Removed' " +
                     "AND [Source].[NG.Release] = '" + release + "' AND [Source].[System.AreaPath] under '" + areaPath + "' " +
                     "AND ([System.Links.LinkType] = 'System.LinkTypes.Hierarchy-Forward') AND ([Target].[System.TeamProject] = '" + Config.Project + "' AND [Target].[System.WorkItemType] <> '') mode(Recursive)";
 

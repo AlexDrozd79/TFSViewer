@@ -70,11 +70,11 @@ public class FeatureEx
                 QATask = childTasks.Where(task => Parser.GetStringValue(task.Fields, "System.Title").Trim().ToUpper().StartsWith("QA ")).Sum(task => Parser.GetFloatValue(task.Fields, "Microsoft.VSTS.Scheduling.OriginalEstimate"));
                 QAATask = childTasks.Where(task => Parser.GetStringValue(task.Fields, "System.Title").Trim().ToUpper().StartsWith("QAA")).Sum(task => Parser.GetFloatValue(task.Fields, "Microsoft.VSTS.Scheduling.OriginalEstimate"));
 
-                NETTask = NETTask/7f;
-                FETask = FETask/7f;
-                DBATask = DBATask/7f;
-                QATask = QATask/7f;
-                QAATask = QAATask/7f;
+                NETTask = (float)Math.Round(NETTask/7f, 2);
+                FETask = (float)Math.Round(FETask/7f, 2);
+                DBATask = (float)Math.Round(DBATask/7f, 2);
+                QATask = (float)Math.Round(QATask/7f, 2);
+                QAATask = (float)Math.Round(QAATask/7f, 2);
 
 
             }

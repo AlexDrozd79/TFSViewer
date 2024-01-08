@@ -22,10 +22,12 @@ public class EstimationsModel : PageModel
 
     public string CurrentRelease { get; set; } = "";
 
+    public string ItemURL {get; set;}
+
 
     public EstimationsModel(IConfiguration configuration)
     {
-        info = new FeaturesInfo(new List<WorkItem>());
+        
     }
 
     public void OnGet()
@@ -33,9 +35,9 @@ public class EstimationsModel : PageModel
 
         CurrentRelease = BusinessLogic.Releases.GetCurrentRelease();
         DateTime dt = BusinessLogic.Releases.GetDateOfCurrentRelease();
-        Releases = BusinessLogic.Releases.GetReleases(dt.AddMonths(-5), dt);
-
+        Releases = BusinessLogic.Releases.GetReleases(dt.AddMonths(-1), dt.AddMonths(3));
         Teams = BusinessLogic.Teams.QueryTeams().ToList();
+        ItemURL = Utils.Config.ItemURL;
 
      
     }
