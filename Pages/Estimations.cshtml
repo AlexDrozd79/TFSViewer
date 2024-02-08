@@ -51,13 +51,25 @@
                 '</tr>');
             $(items).each(function (index, value) {
                 $("#" + tag).append('<tr><td>' + GetIDLink(value.id) + '</td>' + 
-                    '<td>' + value.title + '</td><td>' + value.netf + '</td><td>' + value.netus + '</td><td>' + value.netTask + '</td>' + 
-                    '<td>' + value.dbaf + '</td><td>' + value.dbaus + '</td><td>' + value.dbaTask + '</td>' + 
-                    '<td>' + value.fef + '</td><td>' + value.feus + '</td><td>' + value.feTask + '</td>' + 
-                    '<td>' + value.qaf + '</td><td>' + value.qaus + '</td><td>' + value.qaTask + '</td>' + 
-                    '<td>' + value.qaaf + '</td><td>' + value.qaaus + '</td><td>' + value.qaaTask + '</td>' +
+                    '<td>' + value.title + '</td>' + 
+                    AddFormattedCells(value.netf, value.netus, value.netTask) +
+                    AddFormattedCells(value.dbaf, value.dbaus, value.dbaTask) +
+                    AddFormattedCells(value.fef, value.feus, value.feTask) +
+                    AddFormattedCells(value.qaf, value.qaus, value.qaTask) +
+                    AddFormattedCells(value.qaaf, value.qaaus, value.qaaTask) +
                 '</tr>');
             });
+        }
+
+        function AddFormattedCells(feature, story, task)
+        {
+            var group = '<td>' + feature + '</td><td>' + story + '</td><td>' + task + '</td>';
+            if (feature != story || story != task)
+            {
+                 group = '<td class="redcell">' + feature + '</td><td class="redcell">' + story + '</td><td class="redcell">' + task + '</td>' ;
+            }
+            return group;
+             
         }
 
         function GetIDLink(ID)
