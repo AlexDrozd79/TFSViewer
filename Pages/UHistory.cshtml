@@ -117,7 +117,6 @@
             });
 
 
-
             $("#go").click(function () {
                 $.ajax("api/UserStories/?fullReverse=true&release=" + $("#releases").val() + "&date=" + $("#datepicker1").val() + "&areapath=" + $("#areapath").val()).done(function (info) {
                     var info1 = info;

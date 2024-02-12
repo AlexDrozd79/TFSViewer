@@ -29,7 +29,7 @@ public static class Features
                     "AND [System.WorkItemType] = 'Feature' AND  [System.State] <> 'Closed' AND  [System.State] <> 'Removed' and [NG.Release] = '" + release + "' and [System.AreaPath] under '" + areaPath + "'" +
                     "Order By [ID] Asc  ASOF '" + currentDate.ToString("MM-dd-yyyy") + "'";
 
-        return QueryExecutor.ExecuteQuery(query);
+        return QueryExecutor.ExecuteQuery(query, date);
 
     }
 

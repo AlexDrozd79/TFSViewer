@@ -8,20 +8,34 @@
     <select id="releases">
         @foreach (var item in Model.Releases)
         {
-            if (@item == Model.CurrentRelease)
+            if (@item.ReleaseName == Model.CurrentRelease)
             {
-                <option value="@item" selected>@item</option>
+                <option value="@item.ReleaseName" selected>@item.ReleaseName</option>
             }
             else
             {
-                <option value="@item">@item</option>
+                <option value="@item.ReleaseName">@item.ReleaseName</option>
             }
         }
     </select>
 
+    <select id="areapath">
+        @foreach (var item in Model.Teams)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+
+    <input type="text" id="datepicker" size="30">
+
+    <button id="go">GO</button>
+
     <div>
-        <canvas id="myChart" style="width:450px; height:430px;max-width:500px"></canvas> 
+        <canvas id="myChart" style="width:450px; height:430px;max-width:500px"></canvas>
         <script>
+
+            var releasesData = @Json.Serialize(Model.Releases.ToArray());    
+
             var url = new URL(window.location.href);
             var mode = url.searchParams.get("mode");
             mode = (mode == null ? "" : mode.toLowerCase());
@@ -115,15 +129,29 @@
             }
 
             $(document).ready(function () {
+
+                var releaseIndex = $("#releases")[0].selectedIndex;
+
+                $("#datepicker").datepicker();
+                $("#datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
+                $("#datepicker").val(releasesData[releaseIndex].startDate.split('T')[0]);
+
+                $("#releases").change(function () {
+                    releaseIndex = $(this)[0].selectedIndex;
+                    $("#datepicker").val(releasesData[releaseIndex].startDate.split('T')[0]);
+                });
+
                 $.ajax("api/Features/").done(function (info) {
                     DrawData(info);
                 });
 
-                $("#releases").change(function () {
-                    $.ajax("api/Features/?release=" + $(this).val()).done(function (info) {
+
+                $("#go").click(function () {
+                    $.ajax("api/Features/?release=" + $("#releases").val() + "&areapath=" + $("#areapath").val() + "&date=" + $("#datepicker").val()).done(function (info) {
                         DrawData(info);
                     });
                 });
+
             });
         </script>
     </div>
