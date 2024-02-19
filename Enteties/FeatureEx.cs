@@ -62,11 +62,11 @@ public class FeatureEx
             QAUS = childUS.Sum(us => Parser.GetFloatValue(us.Fields, "NG.QAEstimation"));
             QAAUS = childUS.Sum(us => Parser.GetFloatValue(us.Fields, "NG.QAAutomationEstimation"));
 
-            NETUS = (float)Math.Round(NETUS / 7f, 2);
-            FEUS = (float)Math.Round(FEUS / 7f, 2);
-            DBAUS = (float)Math.Round(DBAUS / 7f, 2);
-            QAUS = (float)Math.Round(QAUS / 7f, 2);
-            QAAUS = (float)Math.Round(QAAUS / 7f, 2);
+            NETUS = (float)Math.Round(NETUS, 2);
+            FEUS = (float)Math.Round(FEUS, 2);
+            DBAUS = (float)Math.Round(DBAUS, 2);
+            QAUS = (float)Math.Round(QAUS, 2);
+            QAAUS = (float)Math.Round(QAAUS, 2);
 
             if (childTasks.Count > 0)
             {
