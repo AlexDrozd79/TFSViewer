@@ -62,6 +62,12 @@ public class FeatureEx
             QAUS = childUS.Sum(us => Parser.GetFloatValue(us.Fields, "NG.QAEstimation"));
             QAAUS = childUS.Sum(us => Parser.GetFloatValue(us.Fields, "NG.QAAutomationEstimation"));
 
+            NETUS = (float)Math.Round(NETUS / 7f, 2);
+            FEUS = (float)Math.Round(FEUS / 7f, 2);
+            DBAUS = (float)Math.Round(DBAUS / 7f, 2);
+            QAUS = (float)Math.Round(QAUS / 7f, 2);
+            QAAUS = (float)Math.Round(QAAUS / 7f, 2);
+
             if (childTasks.Count > 0)
             {
                 NETTask = childTasks.Where(task => Parser.GetStringValue(task.Fields, "System.Title").Trim().ToUpper().StartsWith(".NET")).Sum(task => Parser.GetFloatValue(task.Fields, "Microsoft.VSTS.Scheduling.OriginalEstimate"));
@@ -70,11 +76,11 @@ public class FeatureEx
                 QATask = childTasks.Where(task => Parser.GetStringValue(task.Fields, "System.Title").Trim().ToUpper().StartsWith("QA ")).Sum(task => Parser.GetFloatValue(task.Fields, "Microsoft.VSTS.Scheduling.OriginalEstimate"));
                 QAATask = childTasks.Where(task => Parser.GetStringValue(task.Fields, "System.Title").Trim().ToUpper().StartsWith("QAA")).Sum(task => Parser.GetFloatValue(task.Fields, "Microsoft.VSTS.Scheduling.OriginalEstimate"));
 
-                NETTask = (float)Math.Round(NETTask/7f, 2);
-                FETask = (float)Math.Round(FETask/7f, 2);
-                DBATask = (float)Math.Round(DBATask/7f, 2);
-                QATask = (float)Math.Round(QATask/7f, 2);
-                QAATask = (float)Math.Round(QAATask/7f, 2);
+                NETTask = (float)Math.Round(NETTask / 7f, 2);
+                FETask = (float)Math.Round(FETask / 7f, 2);
+                DBATask = (float)Math.Round(DBATask / 7f, 2);
+                QATask = (float)Math.Round(QATask / 7f, 2);
+                QAATask = (float)Math.Round(QAATask / 7f, 2);
 
 
             }
